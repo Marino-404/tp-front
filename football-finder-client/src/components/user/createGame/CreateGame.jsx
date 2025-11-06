@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { TittleCard } from "../../styles/Cards.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
-
 import SearchInput from "../../searchInput/SearchInput.jsx";
 import PropertyItem from "./PropertyItem.jsx";
 

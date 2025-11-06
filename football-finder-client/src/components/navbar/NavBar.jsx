@@ -1,28 +1,28 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { MdLogout } from "react-icons/md";
+import {
+  MdLogout,
+  MdOutlineDarkMode,
+  MdOutlineLightMode,
+} from "react-icons/md";
 import { AuthenticationContext } from "../services/auth.context";
 import { useContext, useState } from "react";
 import ConfirmModal from "../modal/ConfirmModal.jsx";
+import { useTheme } from "../../hooks/useTheme.js";
 
 const NavBar = ({ links = [] }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { handleUserLogout } = useContext(AuthenticationContext);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleLogoutClick = () => {
-    setIsModalOpen(true);
-  };
+  const { theme, toggleTheme } = useTheme();
 
-  const handleCancelLogout = () => {
-    setIsModalOpen(false);
-  };
-
+  const handleLogoutClick = () => setIsModalOpen(true);
+  const handleCancelLogout = () => setIsModalOpen(false);
   const handleConfirmLogout = () => {
     handleUserLogout();
     setIsModalOpen(false);
-    navigate("/"); // Opcional: redirige al home después del logout
+    navigate("/");
   };
 
   return (
@@ -37,16 +37,33 @@ const NavBar = ({ links = [] }) => {
         cancelText="Cancelar"
       />
 
-      <nav className="fixed top-0 w-screen h-[60px] z-50 flex items-center justify-between px-12 text-white backdrop-blur-md bg-black/30 border-b border-white/10 shadow-md">
+      <nav
+        className={`fixed top-0 w-screen h-[60px] z-50 flex items-center justify-between px-12 
+        transition-colors duration-500 border-b shadow-md backdrop-blur-md
+        ${
+          theme === "dark"
+            ? "bg-black/40 border-white/10 text-white"
+            : "bg-white/70 border-black/10 text-gray-800"
+        }`}
+      >
+        {/* Logo */}
         <div className="flex flex-row items-center">
           <Link to="/" className="flex">
-            <p className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
+            <p
+              className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r 
+              ${
+                theme === "dark"
+                  ? "from-blue-400 to-blue-900"
+                  : "from-blue-600 to-blue-400"
+              }`}
+            >
               Football
             </p>
             <p className="text-xl">Finder</p>
           </Link>
         </div>
 
+        {/* Links + botones */}
         <div className="flex items-center px-12">
           <ul className="flex gap-11 items-center">
             {links.map((link) => {
@@ -55,8 +72,16 @@ const NavBar = ({ links = [] }) => {
                 <li key={link.url}>
                   <Link
                     to={link.url}
-                    className={`relative text-sm font-semibold transition-colors duration-300 
-                      ${isActive ? "text-blue-400" : "hover:text-white"} 
+                    className={`relative text-sm font-semibold transition-all duration-300
+                      ${
+                        isActive
+                          ? theme === "dark"
+                            ? "text-blue-400"
+                            : "text-blue-600"
+                          : theme === "dark"
+                          ? "hover:text-white"
+                          : "hover:text-gray-700"
+                      }
                       after:absolute after:left-0 after:top-4 after:translate-y-1/2 after:rounded-full
                       after:h-[2px] after:bg-blue-400 after:w-0 hover:after:w-full 
                       after:transition-all after:duration-500`}
@@ -66,9 +91,41 @@ const NavBar = ({ links = [] }) => {
                 </li>
               );
             })}
+
+            {/* Switch de tema */}
+            <li>
+              <button
+                onClick={toggleTheme}
+                aria-label="Cambiar tema"
+                className={`relative flex items-center w-14 h-7 rounded-full transition-colors duration-500 cursor-pointer
+                  ${theme === "dark" ? "bg-gray-300" : "bg-gray-700"}`}
+              >
+                <span
+                  className={`absolute flex items-center justify-center w-6 h-6 rounded-full  shadow-md transform transition-transform duration-500
+                    ${
+                      theme === "dark"
+                        ? "translate-x-7 bg-gray-700"
+                        : "translate-x-1 bg-gray-300"
+                    }`}
+                >
+                  {theme === "dark" ? (
+                    <MdOutlineLightMode className="text-yellow-400 text-[16px]" />
+                  ) : (
+                    <MdOutlineDarkMode className="text-gray-800 text-[16px]" />
+                  )}
+                </span>
+              </button>
+            </li>
+
+            {/* Logout */}
             <li>
               <MdLogout
-                className="text-2xl cursor-pointer hover:text-red-400 transition"
+                className={`text-2xl cursor-pointer transition
+                ${
+                  theme === "dark"
+                    ? "hover:text-red-400"
+                    : "hover:text-red-600 text-gray-700"
+                }`}
                 onClick={handleLogoutClick}
                 title="Cerrar sesión"
               />

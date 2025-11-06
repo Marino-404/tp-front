@@ -3,7 +3,8 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import GameItem from "./GameItem.jsx";
 import { jwtDecode } from "jwt-decode";
 import { ContainerStyle } from "../../styles/Container.jsx";
-import SearchInput from '../../searchInput/SearchInput.jsx'
+import SearchInput from "../../searchInput/SearchInput.jsx";
+import { TittleCard } from "../../styles/Cards.jsx";
 
 function GamesAvlb() {
   const [games, setGames] = useState([]);
@@ -72,26 +73,33 @@ function GamesAvlb() {
       </div>
     );
 
-
   const handleChangeQuery = (query) => {
     setQuery(query);
     if (!query) {
       setFilteredGames(games);
       return;
     }
-    const filtered = games.filter((game) =>
-      game.userCreator.name.toLowerCase().includes(query.toLowerCase()) ||
-      game.reservation.fieldType.property.name.toLowerCase().includes(query.toLowerCase()) ||
-      game.reservation.fieldType.field_type.toLowerCase().includes(query.toLowerCase()) ||
-      game.reservation.date.toLowerCase().includes(query.toLowerCase()) ||
-      game.reservation.fieldType.property.zone.toLowerCase().includes(query.toLowerCase())
+    const filtered = games.filter(
+      (game) =>
+        game.userCreator.name.toLowerCase().includes(query.toLowerCase()) ||
+        game.reservation.fieldType.property.name
+          .toLowerCase()
+          .includes(query.toLowerCase()) ||
+        game.reservation.fieldType.field_type
+          .toLowerCase()
+          .includes(query.toLowerCase()) ||
+        game.reservation.date.toLowerCase().includes(query.toLowerCase()) ||
+        game.reservation.fieldType.property.zone
+          .toLowerCase()
+          .includes(query.toLowerCase())
     );
     setFilteredGames(filtered);
-
-  }
+  };
 
   return (
-    <div className={ContainerStyle} >
+    <div className={ContainerStyle}>
+      <h1 className={TittleCard}>Busca partidos disponibles</h1>
+
       <SearchInput query={query} setQuery={handleChangeQuery} />
       <div className="flex flex-col gap-8 w-full items-center mt-15">
         {filteredGames.map((game) => (
