@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
 import Button1 from "../../styles/Button1";
-import { inputStyle, colorStrong } from "../../styles/Cards";
+import { colorStrong } from "../../styles/Cards";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 
 function InvItem({ inv, onAccept }) {
@@ -46,21 +46,32 @@ function InvItem({ inv, onAccept }) {
     <>
       <Modal />
 
-      <p className={inputStyle}>
+      <p
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         <strong className={colorStrong}>Te invitó:</strong>{" "}
         {inv.gameInvited.userCreator.name}
       </p>
-      <p className={inputStyle}>
+      <p
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         <strong className={colorStrong}>Día y hora:</strong>{" "}
         {inv.gameInvited.reservation.date} -{" "}
         {inv.gameInvited.reservation.schedule.schedule}hs
       </p>
-      <p className={inputStyle}>
+      <p
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         <strong className={colorStrong}>Cancha:</strong>{" "}
         {inv.gameInvited.reservation.schedule.property.zone} -{" "}
         {inv.gameInvited.reservation.schedule.property.adress}
       </p>
-    
 
       <Button1
         onClick={() =>

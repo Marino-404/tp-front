@@ -7,9 +7,10 @@ import {
   colorStrong,
   TittleCard,
 } from "../../styles/Cards.jsx";
-import { ContainerStyle } from "../../styles/Container.jsx";
+import { useAppContext } from "../../../context/AppContext.jsx";
 
-function UpcomingGames({setHasGames}) {
+function UpcomingGames({ setHasGames }) {
+  const { isDark } = useAppContext();
   const { token } = useContext(AuthenticationContext);
   const [loading, setLoading] = React.useState(true);
   const [games, setGames] = React.useState([]);
@@ -31,7 +32,7 @@ function UpcomingGames({setHasGames}) {
       .then((data) => {
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
-        console.log(data)
+        console.log(data);
         const gamesFiltrados = data.filter((game) => {
           const fechaJuego = new Date(game.game.reservation.date + "T00:00:00");
           return fechaJuego >= hoy;
@@ -51,51 +52,67 @@ function UpcomingGames({setHasGames}) {
 
   if (loading)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p>Cargando datos del usuario...</p>
       </div>
     );
   if (error)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p className="text-red-500">{error}</p>
       </div>
     );
 
-
   return (
-    <div className={CardContainer}>
-      {games.length > 0 && (
-        <ul className="flex flex-col w-full">
-          <h2 className={TittleCard}>Próximos Partidos</h2>
-          {games.map((game) => (
-            <li key={game.game.id} className="mb-6 flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg">
-              <p className={inputStyle}>
-                <strong className={colorStrong}>Fecha:</strong>{" "}
-                {game.game.reservation.date}
-              </p>
-              <p className={inputStyle}>
-                <strong className={colorStrong}>Hora:</strong>{" "}
-                {game.game.reservation.schedule.schedule}
-                :00hs
-              </p>
-              <p className={inputStyle}>
-                <strong className={colorStrong}>Cancha:</strong>{" "}
-                {game.game.reservation.fieldType.property.zone} -{" "}
-                {game.game.reservation.fieldType.property.adress}
-              </p>
-              <p className={inputStyle}>
-                <strong className={colorStrong}>Creador:</strong>{" "}
-                {game.game.userCreator.name}
-              </p>
-              <p className={inputStyle}>
-                <strong className={colorStrong}>Tipo de cancha:</strong>{" "}
-                {game.game.reservation.fieldType.field_type}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div
+      className={`flex flex-col items-start ${
+        isDark ? "bg-white/10" : "bg-gray-200"
+      } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+    >
+      <ul className="flex flex-col w-full">
+        <h2 className={TittleCard}>Próximos Partidos</h2>
+        {games.map((game) => (
+          <li
+            key={game.game.id}
+            className="mb-6 flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
+          >
+            <p className={inputStyle}>
+              <strong className={colorStrong}>Fecha:</strong>{" "}
+              {game.game.reservation.date}
+            </p>
+            <p className={inputStyle}>
+              <strong className={colorStrong}>Hora:</strong>{" "}
+              {game.game.reservation.schedule.schedule}
+              :00hs
+            </p>
+            <p className={inputStyle}>
+              <strong className={colorStrong}>Cancha:</strong>{" "}
+              {game.game.reservation.fieldType.property.zone} -{" "}
+              {game.game.reservation.fieldType.property.adress}
+            </p>
+            <p className={inputStyle}>
+              <strong className={colorStrong}>Creador:</strong>{" "}
+              {game.game.userCreator.name}
+            </p>
+            <p className={inputStyle}>
+              <strong className={colorStrong}>Tipo de cancha:</strong>{" "}
+              {game.game.reservation.fieldType.field_type}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

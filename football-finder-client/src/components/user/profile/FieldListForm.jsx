@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "../../styles/Button";
+import { useAppContext } from "../../../context/AppContext.jsx";
 
 function FieldListForm({ fields, onAddFields, onRemoveField }) {
+  const { isDark } = useAppContext();
   const [newField, setNewField] = useState("");
 
   const handleAdd = () => {
@@ -15,9 +17,6 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
   const handleRemove = (field) => {
     onRemoveField(field);
   };
-
-  const inputStyle =
-    "text-xs text-white font-bold w-1/2 py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
   return (
     <div>
@@ -33,7 +32,9 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
             }
           }}
           placeholder="Nueva cancha"
-          className={inputStyle}
+          className={`text-xs ${
+            isDark ? "text-white" : "text-black"
+          } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
         />
         <Button type="button" onClick={handleAdd}>
           Agregar
@@ -43,7 +44,8 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
       <ul className="min-h-[48px] flex flex-wrap gap-2 items-start">
         {fields.map((field, index) => (
           <li key={index} className="text-xs">
-            <button type="button"
+            <button
+              type="button"
               onClick={() => handleRemove(field)}
               className="bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 hover:cursor-pointer transition-colors"
             >

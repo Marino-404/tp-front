@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
@@ -9,10 +9,11 @@ import FieldListForm from "./FieldListForm.jsx";
 
 import RedButton from "../../styles/RedButton.jsx";
 import Button from "../../styles/Button.jsx";
-import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
-import { ContainerStyle } from "../../styles/Container.jsx";
+
+import { useAppContext } from "../../../context/AppContext.jsx";
 
 function UpdateForm() {
+  const { isDark } = useAppContext();
   const navigate = useNavigate();
   const { uid } = useParams();
   const { token, handleUserLogout } = useContext(AuthenticationContext);
@@ -66,12 +67,12 @@ function UpdateForm() {
 
   const onAddPosition = (newPos) => {
     if (newPos) {
-      if(positions.includes(newPos)){
-        errorToast('Posicion ya registrada')
-        return false
+      if (positions.includes(newPos)) {
+        errorToast("Posicion ya registrada");
+        return false;
       }
       setPositions([...positions, newPos]);
-      return true
+      return true;
     }
   };
 
@@ -81,12 +82,12 @@ function UpdateForm() {
 
   const onAddFields = (newField) => {
     if (newField) {
-      if(fieldsType.includes(newField)){
-        errorToast('Cancha ya registrada')
-        return false
+      if (fieldsType.includes(newField)) {
+        errorToast("Cancha ya registrada");
+        return false;
       }
       setFieldsType([...fieldsType, newField]);
-      return true
+      return true;
     }
   };
 
@@ -94,7 +95,6 @@ function UpdateForm() {
     setFieldsType(fieldsType.filter((f) => f !== fieldToRemove));
   };
   const confirmUpdate = (updatedProfile) => {
-   
     if (!updatedProfile) return;
     fetch("http://localhost:8080/api/users/update", {
       method: "PUT",
@@ -116,7 +116,7 @@ function UpdateForm() {
         successToast("Perfil actualizado correctamente");
         navigate("/user/profile");
       })
-      .catch((err) => errorToast(err.message))
+      .catch((err) => errorToast(err.message));
   };
 
   const handleSubmit = (e) => {
@@ -142,10 +142,6 @@ function UpdateForm() {
       user_fields: fieldsType,
     };
 
-  
-  
-
-
     show({
       title: "¿Confirmás la actualización del perfil?",
       message: "Se guardarán los cambios realizados.",
@@ -156,8 +152,6 @@ function UpdateForm() {
       },
     });
   };
-
-
 
   const confirmDelete = () => {
     fetch(`http://localhost:8080/api/users/delete/${uid}`, {
@@ -171,55 +165,91 @@ function UpdateForm() {
         return;
       }
       successToast("Perfil borrado correctamente");
-      handleUserLogout()
+      handleUserLogout();
       navigate("/");
     });
   };
 
   if (loading)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p>Cargando datos del usuario...</p>
       </div>
     );
   if (error)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p className="text-red-500">{error}</p>
       </div>
     );
 
   return (
-    <div className={ContainerStyle}>
-      <div className={CardContainer}>
-        <h2 className={TittleCard}>Actualizar Perfil</h2>
+    <div
+      className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+        isDark
+          ? "bg-gradient-to-r from-black via-gray-900 to-black"
+          : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+      }`}
+    >
+      <div
+        className={`flex flex-col items-start ${
+          isDark ? "bg-white/10" : "bg-gray-200"
+        } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+      >
+        <h2
+          className={`text-lg font-semibold mb-4 ${
+            isDark ? "text-white" : "text-gray-900"
+          }`}
+        >
+          Actualizar perfil
+        </h2>
         <form className="w-full" onSubmit={handleSubmit}>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className={inputStyle}
+            className={`text-xs ${
+              isDark ? "text-white" : "text-black"
+            } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             placeholder="Nombre completo"
           />
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={inputStyle}
+            className={`text-xs ${
+              isDark ? "text-white" : "text-black"
+            } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             placeholder="Email"
           />
           <input
             type="text"
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            className={inputStyle}
+            className={`text-xs ${
+              isDark ? "text-white" : "text-black"
+            } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             placeholder="Edad"
           />
           <input
             type="text"
             value={zone}
             onChange={(e) => setZone(e.target.value)}
-            className={inputStyle}
+            className={`text-xs ${
+              isDark ? "text-white" : "text-black"
+            } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             placeholder="Zona"
           />
 

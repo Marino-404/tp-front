@@ -7,7 +7,7 @@ import {
 import { AuthenticationContext } from "../services/auth.context";
 import { useContext, useState } from "react";
 import ConfirmModal from "../modal/ConfirmModal.jsx";
-import { useTheme } from "../../hooks/useTheme.js";
+import { useAppContext } from "../../context/AppContext.jsx"; // 👈 importamos el store global
 
 const NavBar = ({ links = [] }) => {
   const navigate = useNavigate();
@@ -15,7 +15,8 @@ const NavBar = ({ links = [] }) => {
   const { handleUserLogout } = useContext(AuthenticationContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { theme, toggleTheme } = useTheme();
+  // 👇 usamos el contexto global
+  const { isDark, toggleTheme } = useAppContext();
 
   const handleLogoutClick = () => setIsModalOpen(true);
   const handleCancelLogout = () => setIsModalOpen(false);
@@ -41,7 +42,7 @@ const NavBar = ({ links = [] }) => {
         className={`fixed top-0 w-screen h-[60px] z-50 flex items-center justify-between px-12 
         transition-colors duration-500 border-b shadow-md backdrop-blur-md
         ${
-          theme === "dark"
+          isDark
             ? "bg-black/40 border-white/10 text-white"
             : "bg-white/70 border-black/10 text-gray-800"
         }`}
@@ -52,7 +53,7 @@ const NavBar = ({ links = [] }) => {
             <p
               className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r 
               ${
-                theme === "dark"
+                isDark
                   ? "from-blue-400 to-blue-900"
                   : "from-blue-600 to-blue-400"
               }`}
@@ -63,7 +64,7 @@ const NavBar = ({ links = [] }) => {
           </Link>
         </div>
 
-        {/* Links + botones */}
+        {/* Links y botones */}
         <div className="flex items-center px-12">
           <ul className="flex gap-11 items-center">
             {links.map((link) => {
@@ -75,10 +76,10 @@ const NavBar = ({ links = [] }) => {
                     className={`relative text-sm font-semibold transition-all duration-300
                       ${
                         isActive
-                          ? theme === "dark"
+                          ? isDark
                             ? "text-blue-400"
                             : "text-blue-600"
-                          : theme === "dark"
+                          : isDark
                           ? "hover:text-white"
                           : "hover:text-gray-700"
                       }
@@ -98,17 +99,17 @@ const NavBar = ({ links = [] }) => {
                 onClick={toggleTheme}
                 aria-label="Cambiar tema"
                 className={`relative flex items-center w-14 h-7 rounded-full transition-colors duration-500 cursor-pointer
-                  ${theme === "dark" ? "bg-gray-300" : "bg-gray-700"}`}
+                  ${isDark ? "bg-gray-300" : "bg-gray-700"}`}
               >
                 <span
-                  className={`absolute flex items-center justify-center w-6 h-6 rounded-full  shadow-md transform transition-transform duration-500
+                  className={`absolute flex items-center justify-center w-6 h-6 rounded-full shadow-md transform transition-transform duration-500
                     ${
-                      theme === "dark"
+                      isDark
                         ? "translate-x-7 bg-gray-700"
                         : "translate-x-1 bg-gray-300"
                     }`}
                 >
-                  {theme === "dark" ? (
+                  {isDark ? (
                     <MdOutlineLightMode className="text-yellow-400 text-[16px]" />
                   ) : (
                     <MdOutlineDarkMode className="text-gray-800 text-[16px]" />
@@ -120,9 +121,8 @@ const NavBar = ({ links = [] }) => {
             {/* Logout */}
             <li>
               <MdLogout
-                className={`text-2xl cursor-pointer transition
-                ${
-                  theme === "dark"
+                className={`text-2xl cursor-pointer transition ${
+                  isDark
                     ? "hover:text-red-400"
                     : "hover:text-red-600 text-gray-700"
                 }`}

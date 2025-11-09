@@ -1,5 +1,3 @@
-import React from "react";
-
 const SearchInput = ({ query, setQuery }) => {
   const handleChange = (e) => {
     setQuery(e.target.value);

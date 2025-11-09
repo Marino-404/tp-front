@@ -1,13 +1,14 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
-import { inputStyle } from "../../styles/Cards";
 import Button1 from "../../styles/Button1";
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { useAppContext } from "../../../context/AppContext";
 
 function AppItem({ application, onAcceptApplication }) {
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
+  const { isDark } = useAppContext();
 
   const handleAcceptApp = async () => {
     try {
@@ -43,7 +44,12 @@ function AppItem({ application, onAcceptApplication }) {
   return (
     <div className="flex flex-col items-start w-full">
       <Modal />
-      <li key={application.id} className={inputStyle}>
+      <li
+        key={application.id}
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         {application.userApplicant.name} ({application.userApplicant.email})
       </li>
 

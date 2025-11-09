@@ -4,6 +4,7 @@ import { inputStyle, TittleCard } from "../../../styles/Cards.jsx";
 import { ContainerStyle } from "../../../styles/Container.jsx";
 import { isInAWeek } from "../../../utils/validations.js";
 import { errorToast, successToast } from "../../../toast/NotificationToast.jsx";
+import { useAppContext } from "../../../../context/AppContext.jsx";
 
 import Button from "../../../styles/Button.jsx";
 import { AuthenticationContext } from "../../../services/auth.context.jsx";
@@ -11,6 +12,7 @@ import { RxCross1 } from "react-icons/rx";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 
 function PropertySchedules() {
+  const { isDark } = useAppContext();
   const { pid } = useParams();
   const navigate = useNavigate();
   const { token } = useContext(AuthenticationContext);
@@ -99,20 +101,42 @@ function PropertySchedules() {
   };
 
   return (
-    <div className={ContainerStyle}>
+    <div
+      className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+        isDark
+          ? "bg-gradient-to-r from-black via-gray-900 to-black"
+          : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+      }`}
+    >
       <Modal />
-      <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15">
-        <h1 className={TittleCard}>Seleccione una fecha</h1>
+      <div
+        className={`flex flex-col items-start ${
+          isDark ? "bg-white/10" : "bg-gray-200"
+        } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+      >
+        {" "}
+        <h1
+          className={`text-lg font-semibold mb-4 ${
+            isDark ? "text-white" : "text-gray-900"
+          }`}
+        >
+          Seleccione una fecha
+        </h1>
         <input
           type="date"
-          className={inputStyle}
+          className={`text-xs ${
+            isDark ? "text-white" : "text-black"
+          } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
           value={date}
           onChange={handleChangeDate}
         />
-
         {date && (
           <div>
-            <h2 className="text-md font-semibold mt-4 mb-4">
+            <h2
+              className={`text-lg font-semibold mb-4 ${
+                isDark ? "text-white" : "text-gray-900"
+              }`}
+            >
               Seleccione un horario disponible
             </h2>
             {fieldSchedules.map((field) => (
@@ -121,7 +145,11 @@ function PropertySchedules() {
                   F{field.field_type}
                 </span>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
-                  <ul className="flex flex-wrap items-center gap-2">
+                  <ul
+                    className={`flex flex-wrap items-center gap-2 ${
+                      isDark ? "text-white" : "text-black"
+                    }`}
+                  >
                     {field.schedule.map((sch) => {
                       const isSelected =
                         Number(sch.id) === Number(selected.id_sch) &&
@@ -153,7 +181,11 @@ function PropertySchedules() {
                         >
                           {sch.schedule}
                           {!sch.available && (
-                            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl text-gray-300">
+                            <span
+                              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl ${
+                                isDark ? "text-gray-300" : "text-gray-300"
+                              }`}
+                            >
                               <RxCross1 />
                             </span>
                           )}
@@ -170,7 +202,9 @@ function PropertySchedules() {
               <div className="my-4">
                 <label
                   htmlFor="missingPlayers"
-                  className="block text-sm font-semibold text-white mb-2 mt-8"
+                  className={`block text-sm font-semibold ${
+                    isDark ? "text-white" : "text-black"
+                  } mb-2 mt-8`}
                 >
                   Jugadores faltantes:
                 </label>
@@ -181,7 +215,9 @@ function PropertySchedules() {
                   max="10"
                   value={missingPlayers}
                   onChange={(e) => setMissingPlayers(Number(e.target.value))}
-                  className={inputStyle}
+                  className={`text-xs ${
+                    isDark ? "text-white" : "text-black"
+                  } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
                 />
               </div>
             )}

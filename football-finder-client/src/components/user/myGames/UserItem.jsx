@@ -1,12 +1,14 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
 import Button from "../../styles/Button";
-import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards";
+import { colorStrong } from "../../styles/Cards";
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { useAppContext } from "../../../context/AppContext";
 
 function UserItem({ user }) {
+  const { isDark } = useAppContext();
   const { gid } = useParams();
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
@@ -40,8 +42,18 @@ function UserItem({ user }) {
     <div className="flex flex-col items-start w-full">
       <Modal />
 
-      <p className={TittleCard}>{user.name}</p>
-      <p className={inputStyle}>
+      <p
+        className={`text-lg font-semibold mb-4 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        {user.name}
+      </p>
+      <p
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         <strong className={colorStrong}>Posiciones:</strong>
         {user.positions.map((pos, index) => (
           <span key={index}>
@@ -50,7 +62,11 @@ function UserItem({ user }) {
           </span>
         ))}
       </p>
-      <p className={inputStyle}>
+      <p
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         <strong className={colorStrong}>Canchas:</strong>
         {user.fieldsType.map((field, index) => (
           <span key={index}>
@@ -59,7 +75,11 @@ function UserItem({ user }) {
           </span>
         ))}
       </p>
-      <p className={inputStyle}>
+      <p
+        className={`text-xs ${
+          isDark ? "text-white" : "text-black"
+        } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+      >
         <strong className={colorStrong}>Zona:</strong>
         {user.zone}
       </p>

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast } from "../../toast/NotificationToast";
 import InvItem from "./InvItem.jsx";
 import AppItem from "./AppItem.jsx";
 import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
-import { ContainerStyle } from "../../styles/Container.jsx";
+import { useAppContext } from "../../../context/AppContext.jsx";
 
 function Participations() {
+  const { isDark } = useAppContext();
   const { token } = useContext(AuthenticationContext);
   const [applications, setApplications] = useState([]);
   const [invitations, setInvitations] = useState([]);
@@ -71,28 +72,58 @@ function Participations() {
 
   if (loadingApp || loadingInv)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p>Cargando participaciones del usuario...</p>
       </div>
     );
   if (error)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p className="text-red-500">{error}</p>
       </div>
     );
 
   return (
-    <div className={ContainerStyle}>
+    <div
+      className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+        isDark
+          ? "bg-gradient-to-r from-black via-gray-900 to-black"
+          : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+      }`}
+    >
       {applications.length === 0 && invitations.length === 0 ? (
-        <p className="text-white text-lg">
+        <p className={` ${isDark ? "text-white" : "text-gray-900"} text-lg`}>
           No tienes postulaciones ni invitaciones
         </p>
       ) : (
-        <div className={CardContainer}>
+        <div
+          className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+            isDark
+              ? "bg-gradient-to-r from-black via-gray-900 to-black"
+              : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+          }`}
+        >
           {applications.length > 0 && (
             <div className="w-full">
-              <h2 className={TittleCard}>Postulaciones</h2>
+              <h2
+                className={`text-lg font-semibold mb-4 ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Postulaciones
+              </h2>
               <ul className="flex flex-col items-start justify-start w-full gap-6">
                 {applications.map((app) => (
                   <li
@@ -108,7 +139,11 @@ function Participations() {
 
           {invitations.length > 0 && (
             <div className="w-full max-w-4xl mt-8">
-              <h2 className="text-xl font-bold text-white mb-4">
+              <h2
+                className={`text-lg font-semibold mb-4 ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Invitaciones
               </h2>
               <ul className="flex flex-col gap-6">

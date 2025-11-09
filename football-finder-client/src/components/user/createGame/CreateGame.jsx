@@ -1,9 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
-import { TittleCard } from "../../styles/Cards.jsx";
-import { ContainerStyle } from "../../styles/Container.jsx";
 import SearchInput from "../../searchInput/SearchInput.jsx";
 import PropertyItem from "./PropertyItem.jsx";
+import { useAppContext } from "../../../context/AppContext.jsx";
 
 const CreateGame = () => {
   const [query, setQuery] = useState("");
@@ -14,6 +13,7 @@ const CreateGame = () => {
 
   const { token } = useContext(AuthenticationContext);
 
+  const { isDark } = useAppContext();
   useEffect(() => {
     fetch("http://localhost:8080/api/properties", {
       headers: {
@@ -40,13 +40,25 @@ const CreateGame = () => {
   }, []);
   if (loading)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p>Cargando propiedades...</p>
       </div>
     );
   if (error)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p className="text-red-500">{error}</p>
       </div>
     );
@@ -74,10 +86,26 @@ const CreateGame = () => {
   };
 
   return (
-    <div className={ContainerStyle}>
-      <h1 className={TittleCard}>Busca predios disponibles</h1>
+    <div
+      className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+        isDark
+          ? "bg-gradient-to-r from-black via-gray-900 to-black"
+          : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+      }`}
+    >
+      <h1
+        className={`text-lg font-semibold mb-4 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        Busca predios disponibles
+      </h1>
       <SearchInput query={query} setQuery={handleChangeQuery} />
-      <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15">
+      <div
+        className={`flex flex-col items-start ${
+          isDark ? "bg-white/10" : "bg-gray-200"
+        } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+      >
         {properties.length > 0 ? (
           <ul className="flex flex-col items-start justify-start w-full gap-6 ">
             {filteredProperties.map((property) => (

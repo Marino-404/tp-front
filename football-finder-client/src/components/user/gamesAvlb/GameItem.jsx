@@ -1,13 +1,15 @@
 import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
-import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
+import { inputStyle, colorStrong } from "../../styles/Cards.jsx";
 import Button1 from "../../styles/Button1.jsx";
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { useAppContext } from "../../../context/AppContext.jsx";
 
 const GameItem = ({ game }) => {
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
+  const { isDark } = useAppContext();
 
   const handleApply = async () => {
     fetch(`http://localhost:8080/api/participations/application/${game.id}`, {
@@ -37,37 +39,75 @@ const GameItem = ({ game }) => {
   };
 
   return (
-    <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-full max-w-2xl">
+    <div
+      className={`flex flex-col items-start ${
+        isDark ? "bg-white/10" : "bg-gray-200"
+      } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+    >
       <Modal />
-      <h2 className={TittleCard}>Partidos disponibles</h2>
+      <h2
+        className={`text-lg font-semibold mb-4 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        Partidos disponibles
+      </h2>
       <ul className="flex flex-col w-full gap-3">
         <li className="border-2 border-gray-500 p-4 rounded-lg">
           <ul>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Creador: </strong>
               {game.userCreator.name}
             </li>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Predio: </strong>
               {game.reservation.fieldType.property.name}
             </li>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Fecha: </strong>
               {game.reservation.date}
             </li>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Hora: </strong>
               {game.reservation.schedule.schedule} hs
             </li>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Zona: </strong>
               {game.reservation.fieldType.property.zone}
             </li>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Cancha: </strong>
               {game.reservation.fieldType.field_type}
             </li>
-            <li className={inputStyle}>
+            <li
+              className={`text-xs ${
+                isDark ? "text-white" : "text-black"
+              } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
+            >
               <strong className={colorStrong}>Dirección: </strong>
               {game.reservation.fieldType.property.adress}
             </li>

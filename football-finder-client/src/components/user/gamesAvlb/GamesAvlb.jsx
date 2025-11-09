@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import GameItem from "./GameItem.jsx";
 import { jwtDecode } from "jwt-decode";
-import { ContainerStyle } from "../../styles/Container.jsx";
 import SearchInput from "../../searchInput/SearchInput.jsx";
 import { TittleCard } from "../../styles/Cards.jsx";
+import { useAppContext } from "../../../context/AppContext.jsx";
 
 function GamesAvlb() {
   const [games, setGames] = useState([]);
@@ -13,6 +13,7 @@ function GamesAvlb() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthenticationContext);
+  const { isDark } = useAppContext();
 
   useEffect(() => {
     if (!token) {
@@ -56,19 +57,37 @@ function GamesAvlb() {
 
   if (loading)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p>Cargando juegos...</p>
       </div>
     );
   if (error)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p className="text-red-500">{error}</p>
       </div>
     );
   if (games.length === 0)
     return (
-      <div className={ContainerStyle}>
+      <div
+        className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+          isDark
+            ? "bg-gradient-to-r from-black via-gray-900 to-black"
+            : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+        }`}
+      >
         <p>No hay juegos disponibles.</p>
       </div>
     );
@@ -97,11 +116,22 @@ function GamesAvlb() {
   };
 
   return (
-    <div className={ContainerStyle}>
-      <h1 className={TittleCard}>Busca partidos disponibles</h1>
-
+    <div
+      className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+        isDark
+          ? "bg-gradient-to-r from-black via-gray-900 to-black"
+          : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+      }`}
+    >
+      <h1
+        className={`text-lg font-semibold mb-4 ${
+          isDark ? "text-white" : "text-gray-900"
+        }`}
+      >
+        Busca partidos disponibles
+      </h1>
       <SearchInput query={query} setQuery={handleChangeQuery} />
-      <div className="flex flex-col gap-8 w-full items-center mt-15">
+      <div className="flex flex-col gap-8 w-full items-center ">
         {filteredGames.map((game) => (
           <GameItem key={game.id} game={game} />
         ))}

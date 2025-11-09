@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Button from "../styles/Button";
 import RedButton from "../styles/RedButton";
 import { AiOutlineClose } from "react-icons/ai";
+import { useAppContext } from "../../context/AppContext";
 
 const ConfirmModal = ({
   isOpen,
@@ -13,35 +14,54 @@ const ConfirmModal = ({
   confirmText = "Confirmar",
   cancelText = "Cancelar",
 }) => {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+  const { theme } = useAppContext();
 
-    return () => {
-      document.body.style.overflow = "";
-    };
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => (document.body.style.overflow = "");
   }, [isOpen]);
 
   if (!isOpen) return null;
 
+  const modalBg =
+    theme === "dark"
+      ? "bg-white/10 border border-white/20 backdrop-blur-md text-white"
+      : "bg-white border border-gray-200 shadow-lg text-gray-800";
+
+  const overlayBg =
+    theme === "dark"
+      ? "bg-black/40 backdrop-blur-sm"
+      : "bg-gray-500/20 backdrop-blur-sm";
+
+  const titleColor = theme === "dark" ? "text-white" : "text-gray-900";
+
+  const messageColor = theme === "dark" ? "text-gray-300" : "text-gray-700";
+
+  const closeBtnColor =
+    theme === "dark"
+      ? "text-gray-300 hover:text-white"
+      : "text-gray-500 hover:text-gray-700";
+
   const modalContent = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-      <div className="relative flex flex-col items-center bg-white/10 backdrop-blur-md shadow-xl border border-white/20 rounded-xl py-24 px-12 w-11/12 max-w-xl  mx-auto">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center ${overlayBg}`}
+    >
+      <div
+        className={`relative flex flex-col items-center rounded-xl py-24 px-12 w-11/12 max-w-xl mx-auto transition-all duration-300 ${modalBg}`}
+      >
         <button
           onClick={onCancel}
-          className="absolute top-3 right-3 text-gray-300 hover:text-white transition cursor-pointer"
+          className={`absolute top-3 right-3 transition cursor-pointer ${closeBtnColor}`}
           aria-label="Cerrar"
         >
           <AiOutlineClose size={20} />
         </button>
 
-        <h3 className="text-lg font-semibold mb-6 text-white text-center">
+        <h3 className={`text-lg font-semibold mb-6 text-center ${titleColor}`}>
           {title}
         </h3>
-        <p className="text-sm text-gray-300 mb-8 text-center">{message}</p>
+        <p className={`text-sm mb-8 text-center ${messageColor}`}>{message}</p>
+
         <div className="flex justify-center gap-4">
           <RedButton onClick={onCancel}>{cancelText}</RedButton>
           <Button onClick={onConfirm}>{confirmText}</Button>
