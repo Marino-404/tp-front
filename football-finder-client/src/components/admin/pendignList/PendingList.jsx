@@ -11,6 +11,7 @@ import {
 } from "../../styles/Cards.jsx";
 
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { API_BASE_URL } from "../../../config/api.js";
 
 const PendingList = () => {
   const [pendientes, setPendientes] = useState([]);
@@ -21,7 +22,7 @@ const PendingList = () => {
   const { Modal, show } = useConfirmModal();
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/properties/games", {
+    fetch(`${API_BASE_URL}/games/by-property?reservationState=pendiente`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -40,20 +41,19 @@ const PendingList = () => {
       })
       .then((data) => {
         if (data) {
-          const filteredGames = data.filter(
-            (game) => game.reservation.state === "pendiente"
-          );
-          setPendientes(filteredGames);
+          setPendientes(data);
+          console.log(data)
           setLoading(false);
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
         setLoading(false);
         setError(true);
       });
   }, [token]);
 
-  const aceptarReserva = (rid) => {
+  const aceptarReserva = (gid) => {
     show({
       title: "Confirmar aceptación",
       message: "¿Querés aceptar esta reserva?",
@@ -62,7 +62,7 @@ const PendingList = () => {
       onConfirm: async () => {
         try {
           const res = await fetch(
-            `http://localhost:8080/api/properties/${rid}/acepted`,
+            `${API_BASE_URL}/properties/${gid}/acepted?state=aceptada`,
             {
               method: "POST",
               headers: {
@@ -73,17 +73,16 @@ const PendingList = () => {
           );
           if (!res.ok) {
             if (res.status === 400) {
-              const data = await res.json();
               throw new Error(data.message || "Error al aceptar la reserva");
             }
             throw new Error("Error al aceptar la reserva");
           }
-          const data = await res.json();
-          if (data) {
-            setPendientes((prev) => prev.filter((r) => r.id !== rid));
+          if (res.ok) {
+            setPendientes((prev) => prev.filter((r) => r.id !== gid));
             successToast("Reserva aceptada correctamente");
           }
         } catch (err) {
+          console.log(err)
           errorToast(err.message || "Error al aceptar la reserva");
         }
       },
@@ -119,21 +118,21 @@ const PendingList = () => {
               >
                 <p className={inputStyle}>
                   <strong className={colorStrong}>Día y hora: </strong>
-                  {game.reservation.date} - {game.reservation.schedule.schedule}
+                  {game.date} - {game.schedule}
                   :00
                   <strong className={colorStrong}> hs</strong>
                 </p>
                 <p className={inputStyle}>
                   <strong className={colorStrong}>Cancha: </strong>
-                  {game.reservation.fieldType.field_type}
+                  {game.field}
                 </p>
                 <p className={inputStyle}>
                   <strong className={colorStrong}>Estado: </strong>
-                  {game.reservation.state}
+                  Pendiente
                 </p>
                 <p className={inputStyle}>
                   <strong className={colorStrong}>A nombre de: </strong>
-                  {game.userCreator.name}
+                  {game.creator.name}
                 </p>
                 <Button1 onClick={() => aceptarReserva(game.id)}>
                   Aceptar

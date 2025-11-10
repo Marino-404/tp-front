@@ -9,6 +9,7 @@ import {
   inputStyle,
   colorStrong,
 } from "../../styles/Cards.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function MyProperty({ setHasProperty }) {
   const [property, setProperty] = useState(null);
@@ -16,7 +17,7 @@ function MyProperty({ setHasProperty }) {
   const [error, setError] = useState(null);
   const { token } = useContext(AuthenticationContext);
   useEffect(() => {
-    fetch("http://localhost:8080/api/properties/my-property", {
+    fetch(`${API_BASE_URL}/properties/my-property`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -71,14 +72,14 @@ function MyProperty({ setHasProperty }) {
           </p>
           <p className={inputStyle}>
             <strong className={colorStrong}>Direccion:</strong>{" "}
-            {property.adress}
+            {property.address}
           </p>
           <p className={inputStyle}>
             <strong className={colorStrong}>Zona:</strong> {property.zone}
           </p>
           <p className={inputStyle}>
             <strong className={colorStrong}>Canchas:</strong>{" "}
-            {property.fields.map((typf) => typf.field_type).join(" - ")}
+            {property.fields.map((typf) => typf.field).join(" - ")}
           </p>
           <p className={inputStyle}>
             <strong className={colorStrong}>Horarios:</strong>{" "}

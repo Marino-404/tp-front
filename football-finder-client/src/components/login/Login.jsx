@@ -6,6 +6,7 @@ import Button1 from "../styles/Button1";
 import Button from "../styles/Button";
 import { jwtDecode } from "jwt-decode";
 import { AuthenticationContext } from "../services/auth.context";
+import { API_BASE_URL } from "../../config/api";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -47,10 +48,10 @@ const Login = ({ setIsLogged }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/api/auths/login", {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ Email: email, Password: password }),
       });
 
       if (!res.ok) {
@@ -59,7 +60,7 @@ const Login = ({ setIsLogged }) => {
         return;
       }
 
-      const token = await res.json();
+      const token = await res.text();
       handleUserLogin(token);
 
       const decoded = jwtDecode(token);
@@ -67,8 +68,8 @@ const Login = ({ setIsLogged }) => {
 
       successToast("Inicio de sesión exitoso.");
 
-      if (userRole === "superadmin") navigate("/superadmin");
-      else if (userRole === "admin") navigate("/admin");
+      if (userRole === "2") navigate("/superadmin");
+      else if (userRole === "1") navigate("/admin");
       else navigate("/user");
 
     } catch (err) {

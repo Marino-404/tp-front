@@ -8,6 +8,7 @@ import FieldListForm from './FieldListForm.jsx';
 import SchedulesListForm from "./SchedulesListForm.jsx";
 import { validarDireccion, validateString } from "../../auth/auth.services.js";
 
+import {API_BASE_URL} from '../../../config/api.js';
 
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import Button from "../../styles/Button.jsx";
@@ -58,14 +59,14 @@ function CreateProperty({setHasProperty}) {
       return;
     }
     const newproperty = {
-      name,
-      adress,
-      zone,
-      schedule: schedules,
-      fields_type: fieldsType,
+      Name: name,
+      Address: adress,
+      Zone: zone,
+      Schedule: schedules,
+      FieldsType: fieldsType,
     }
 
-    fetch('http://localhost:8080/api/properties/newproperty', {
+    fetch(`${API_BASE_URL}/properties`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
