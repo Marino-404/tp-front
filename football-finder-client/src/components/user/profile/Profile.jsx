@@ -6,6 +6,7 @@ import Button1 from "../../styles/Button1.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 const Profile = () => {
   const { isDark } = useAppContext();
@@ -16,7 +17,7 @@ const Profile = () => {
   const [hasGames, setHasGames] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/users/profile", {
+    fetch(`${API_BASE_URL}/users/profile`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

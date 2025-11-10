@@ -11,6 +11,7 @@ import RedButton from "../../styles/RedButton.jsx";
 import Button from "../../styles/Button.jsx";
 
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function UpdateForm() {
   const { isDark } = useAppContext();
@@ -38,7 +39,7 @@ function UpdateForm() {
     }
 
     setLoading(true);
-    fetch(`http://localhost:8080/api/users/profile`, {
+    fetch(`${API_BASE_URL}/users/profile`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -96,7 +97,7 @@ function UpdateForm() {
   };
   const confirmUpdate = (updatedProfile) => {
     if (!updatedProfile) return;
-    fetch("http://localhost:8080/api/users/update", {
+    fetch(`${API_BASE_URL}/users/${uid}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -116,7 +117,10 @@ function UpdateForm() {
         successToast("Perfil actualizado correctamente");
         navigate("/user/profile");
       })
-      .catch((err) => errorToast(err.message));
+      .catch((err) => {
+        console.log(err)
+        errorToast(err.message)
+      });
   };
 
   const handleSubmit = (e) => {
@@ -134,12 +138,12 @@ function UpdateForm() {
     }
 
     const updatedProfile = {
-      name,
-      email,
-      age: parseInt(age),
-      zone,
-      user_positions: positions,
-      user_fields: fieldsType,
+      Name: name,
+      Email: email,
+      Age: parseInt(age),
+      Zone: zone,
+      Positions: positions,
+      FieldsType: fieldsType,
     };
 
     show({

@@ -10,6 +10,7 @@ import { errorToast, successToast } from "../toast/NotificationToast";
 import Button1 from "../styles/Button1";
 import Button from "../styles/Button";
 import { jwtDecode } from "jwt-decode";
+import { API_BASE_URL } from "../../config/api";
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
@@ -95,17 +96,17 @@ const Register = () => {
     }
 
     const newUser = {
-      name,
-      email,
-      password,
-      age: Number(age),
-      zone,
-      positions,
-      fields,
+      Name: name,
+      Email: email,
+      Password: password,
+      Age: Number(age),
+      Zone: zone,
+      Positions: positions,
+      FieldsType: fields,
     };
 
     try {
-      const res = await fetch("http://localhost:8080/api/auths/register", {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),

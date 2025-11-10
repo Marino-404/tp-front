@@ -6,6 +6,7 @@ import Button from "../../styles/Button";
 import { colorStrong } from "../../styles/Cards";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import { useAppContext } from "../../../context/AppContext";
+import { API_BASE_URL } from "../../../config/api";
 
 function UserItem({ user }) {
   const { isDark } = useAppContext();
@@ -14,14 +15,20 @@ function UserItem({ user }) {
   const { show, Modal } = useConfirmModal();
 
   const handleInvite = () => {
+    const participationData = {
+      GameId: parseInt(gid),
+      userId: user.id,
+      Type : "invitacion"
+    };
     fetch(
-      `http://localhost:8080/api/participations/invitation/${gid}/${user.id}`,
+      `${API_BASE_URL}/participations`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(participationData),
       }
     )
       .then((res) => {

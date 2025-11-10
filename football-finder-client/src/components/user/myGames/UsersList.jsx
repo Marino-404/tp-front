@@ -5,6 +5,7 @@ import { useAppContext } from "../../../context/AppContext.jsx";
 
 import UserItem from "./UserItem.jsx";
 import SearchInput from "../../searchInput/SearchInput.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function UsersList() {
   const { isDark } = useAppContext();
@@ -24,7 +25,7 @@ function UsersList() {
     }
     const decoded = jwtDecode(token);
     const userId = decoded.id;
-    fetch("http://localhost:8080/api/users", {
+    fetch(`${API_BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -37,7 +38,7 @@ function UsersList() {
       })
       .then((data) => {
         const filteredUsers = data.filter(
-          (user) => user.rol === "player" && user.id !== userId
+          (user) => user.role === "player" && user.id != userId
         );
 
         setUsers(filteredUsers);
@@ -57,6 +58,7 @@ function UsersList() {
       setFilteredUsers(users);
       return;
     }
+    console.log(users)
     const filteredUsers = users.filter(
       (user) =>
         user.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -65,7 +67,7 @@ function UsersList() {
           return pos.position.toLowerCase().includes(query.toLowerCase());
         }) ||
         user.fieldsType.some((field) => {
-          return field.field.toLowerCase().includes(query.toLowerCase());
+          return field.field == query.toLowerCase();
         })
     );
 

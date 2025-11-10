@@ -6,6 +6,7 @@ import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards";
 import Button1 from "../../styles/Button1";
 import AppItem from "./AppItem";
 import { useAppContext } from "../../../context/AppContext";
+import { API_BASE_URL } from "../../../config/api";
 
 function MyGames() {
   const { isDark } = useAppContext();
@@ -17,7 +18,7 @@ function MyGames() {
   const { token } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/users/my-games", {
+    fetch(`${API_BASE_URL}/games/my-games`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -34,13 +35,6 @@ function MyGames() {
       .then((data) => {
         if (data) {
           setGames(data);
-          const allApplications = data.flatMap((game) => game.gameApplications);
-          const pendingApplications = allApplications.filter(
-            (app) => app.state.trim().toLowerCase() === "pendiente"
-          );
-          setApplications(pendingApplications);
-          const allUsersInGame = data.flatMap((game) => game.players);
-          setUsersInGame(allUsersInGame);
         }
         setLoading(false);
       })
@@ -81,7 +75,7 @@ function MyGames() {
         <p className="text-red-500">{error}</p>;
       </div>
     );
-  console.log(applications);
+
 
   return (
     <div
@@ -122,7 +116,7 @@ function MyGames() {
                   } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
                 >
                   <strong className={colorStrong}>Predio: </strong>
-                  {game.reservation.fieldType.property.name}
+                  {game.propertyName}
                 </h2>
                 <p
                   className={`text-xs ${
@@ -130,7 +124,7 @@ function MyGames() {
                   } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
                 >
                   <strong className={colorStrong}>Fecha: </strong>
-                  {game.reservation.date}
+                  {game.date}
                 </p>
                 <p
                   className={`text-xs ${
@@ -138,7 +132,7 @@ function MyGames() {
                   } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
                 >
                   <strong className={colorStrong}>Hora: </strong>
-                  {game.reservation.schedule.schedule}
+                  {game.schedule}
                   <strong className={colorStrong}> hs</strong>
                 </p>
                 <p
@@ -155,9 +149,9 @@ function MyGames() {
                   } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
                 >
                   <strong className={colorStrong}>Estado: </strong>
-                  {game.reservation.state}
+                  {game.state}
                 </p>
-                {game.reservation.state == "aceptada" && (
+                {game.state == "aceptada" && (
                   <Button1>
                     <a href={`/user/users-list/${game.id}`}>
                       Invitar jugadores
@@ -165,32 +159,32 @@ function MyGames() {
                   </Button1>
                 )}
 
-                {usersInGame.length > 0 && (
+                {game.players.length > 0 && (
                   <h2 className="text-lg text-blue-400 font-semibold mb-1 mt-6">
                     Jugadores confirmados:
                   </h2>
                 )}
 
                 <ul className="flex flex-col gap-2">
-                  {usersInGame.map((user) => (
+                  {game.players.map((user) => (
                     <li
                       key={user.id}
                       className="text-xs text-white font-bold w-full py-3  mb-2 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none"
                     >
-                      {user.player.name}{" "}
+                      {user.name}{" "}
                       <strong className={colorStrong}>
-                        ({user.player.email})
+                        ({user.email})
                       </strong>
                     </li>
                   ))}
                 </ul>
-                {applications.length > 0 && (
+                {game.applications.length > 0 && (
                   <h2 className="text-lg text-blue-400 font-semibold mb-1 mt-6">
                     Postulaciones pendientes:
                   </h2>
                 )}
                 <ul className="flex flex-col gap-2">
-                  {applications.map((application) => (
+                  {game.applications.map((application) => (
                     <AppItem
                       key={application.id}
                       application={application}

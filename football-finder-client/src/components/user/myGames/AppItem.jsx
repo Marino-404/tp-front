@@ -4,16 +4,19 @@ import { errorToast, successToast } from "../../toast/NotificationToast";
 import Button1 from "../../styles/Button1";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import { useAppContext } from "../../../context/AppContext";
+import { colorStrong } from "../../styles/Cards";
+import { API_BASE_URL } from "../../../config/api";
 
 function AppItem({ application, onAcceptApplication }) {
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
   const { isDark } = useAppContext();
 
+
   const handleAcceptApp = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/participations/acepted-application/${application.id}`,
+        `${API_BASE_URL}/participations/handle/${application.id}?newState=aceptada`,
         {
           method: "POST",
           headers: {
@@ -23,6 +26,7 @@ function AppItem({ application, onAcceptApplication }) {
         }
       );
 
+      console.log(application)
       if (!res.ok) {
         if (res.status === 400) {
           const data = await res.json();
@@ -34,7 +38,7 @@ function AppItem({ application, onAcceptApplication }) {
       const data = await res.json();
       if (data) {
         successToast("Solicitud aceptada correctamente");
-        onAcceptApplication(application.id, application.userApplicant);
+        onAcceptApplication(application.id, application.user);
       }
     } catch (err) {
       errorToast(err.message);
@@ -50,14 +54,16 @@ function AppItem({ application, onAcceptApplication }) {
           isDark ? "text-white" : "text-black"
         } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
       >
-        {application.userApplicant.name} ({application.userApplicant.email})
+        {application.user.name} <strong className={colorStrong}>
+                                ({application.user.email})
+                              </strong>
       </li>
 
       <Button1
         onClick={() =>
           show({
             title: "¿Aceptar solicitud?",
-            message: `¿Estás seguro de que querés aceptar a ${application.userApplicant.name}?`,
+            message: `¿Estás seguro de que querés aceptar a ${application.user.name}?`,
             confirmText: "Aceptar",
             cancelText: "Cancelar",
             onConfirm: handleAcceptApp,
