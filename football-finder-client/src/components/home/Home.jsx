@@ -36,8 +36,8 @@ const Home = () => {
     if (token && isTokenValid(token)) {
       try {
         const { role } = jwtDecode(token);
-        if (role === "superadmin") navigate("/superadmin");
-        else if (role === "admin") navigate("/admin");
+        if (role === "2") navigate("/superadmin");
+        else if (role === "1") navigate("/admin");
         else navigate("/user");
       } catch {
         navigate("/login");

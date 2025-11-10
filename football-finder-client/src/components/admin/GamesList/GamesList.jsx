@@ -4,6 +4,8 @@ import { ContainerStyle } from "../../styles/Container";
 import { CardContainer, TittleCard } from "../../styles/Cards";
 import { inputStyle, colorStrong } from "../../styles/Cards";
 
+import { API_BASE_URL } from "../../../config/api.js";
+
 const GamesList = () => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ const GamesList = () => {
   const { token } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/properties/games", {
+    fetch(`${API_BASE_URL}/games/by-property?reservationState=aceptada`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -31,10 +33,8 @@ const GamesList = () => {
       })
       .then((data) => {
         if (data) {
-          const filteredGames = data.filter(
-            (game) => game.reservation.state === "aceptada"
-          );
-          setGames(filteredGames);
+          console.log(data)
+          setGames(data);
           setLoading(false);
         }
       })
@@ -74,21 +74,21 @@ const GamesList = () => {
               >
                 <h2 className={inputStyle}>
                   <strong className={colorStrong}>A nombre de: </strong>
-                  {game.userCreator.name}
+                  {game.creator.name}
                 </h2>
                 <h2 className={inputStyle}>
                   <strong className={colorStrong}>Dia y hora: </strong>{" "}
-                  {game.reservation.date} - {game.reservation.schedule.schedule}
+                  {game.date} - {game.schedule}
                   :00<strong className={colorStrong}> hs</strong>
                 </h2>
                 <h2 className={inputStyle}>
                   <strong className={colorStrong}>Cancha: </strong>
-                  {game.reservation.fieldType.field_type}
+                  {game.field}
                 </h2>
                 <h2 className={inputStyle}>
                   {" "}
                   <strong className={colorStrong}>Estado: </strong>
-                  {game.reservation.state}
+                  Aceptada
                 </h2>
               </li>
             ))}

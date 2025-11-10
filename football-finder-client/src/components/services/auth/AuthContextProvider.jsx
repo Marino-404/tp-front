@@ -13,6 +13,7 @@ export const AuthenticationContextProvider = ({ children }) => {
 
   // Función para iniciar sesión: guarda el token y actualiza el estado
   const handleUserLogin = (token) => {
+    console.log(token)
     localStorage.setItem("football-finder-token", token);
     setToken(token);
   };

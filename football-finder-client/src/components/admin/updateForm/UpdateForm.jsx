@@ -11,6 +11,7 @@ import Button from "../../styles/Button.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function UpdateForm() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function UpdateForm() {
   const { token } = useContext(AuthenticationContext);
 
   const [name, setName] = useState("");
-  const [adress, setAdress] = useState("");
+  const [address, setAddress] = useState("");
   const [zone, setZone] = useState("");
   const [schedules, setSchedules] = useState([]);
   const [fieldsType, setFieldsType] = useState([]);
@@ -35,13 +36,13 @@ function UpdateForm() {
       return;
     }
     setName("");
-    setAdress("");
+    setAddress("");
     setZone("");
     setSchedules([]);
     setFieldsType([]);
     setLoading(true);
     setError(null);
-    fetch(`http://localhost:8080/api/properties/my-property`, {
+    fetch(`${API_BASE_URL}/properties/my-property`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -57,10 +58,10 @@ function UpdateForm() {
       })
       .then((data) => {
         setName(data.name);
-        setAdress(data.adress);
+        setAddress(data.address);
         setZone(data.zone);
         setSchedules(data.schedules.map((sch) => sch.schedule));
-        setFieldsType(data.fields.map((field) => field.field_type));
+        setFieldsType(data.fields.map((field) => field.field));
         setLoading(false);
       });
   }, [token]);
@@ -106,14 +107,14 @@ function UpdateForm() {
 
   const updatePropertyRequest = () => {
     const updateProperty = {
-      name,
-      adress,
-      zone,
-      schedule: schedules,
-      fields_type: fieldsType,
+      Name: name,
+      Address: address,
+      Zone: zone,
+      Schedules: schedules,
+      FieldsType: fieldsType,
     };
 
-    fetch(`http://localhost:8080/api/properties/update/${pid}`, {
+    fetch(`${API_BASE_URL}/properties/${pid}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -130,7 +131,7 @@ function UpdateForm() {
       })
       .then((data) => {
         setName(data.name);
-        setAdress(data.adress);
+        setAddress(data.address);
         setZone(data.zone);
         successToast("Perfil actualizado correctamente");
         navigate("/admin");
@@ -141,7 +142,7 @@ function UpdateForm() {
     e.preventDefault();
     if (
       !name ||
-      !adress ||
+      !address ||
       !zone ||
       schedules.length === 0 ||
       fieldsType.length === 0
@@ -173,7 +174,7 @@ function UpdateForm() {
       onConfirm: async () => {
         try {
           const res = await fetch(
-            `http://localhost:8080/api/properties/${pid}`,
+            `${API_BASE_URL}/properties/${pid}`,
             {
               method: "DELETE",
               headers: {
@@ -211,10 +212,10 @@ function UpdateForm() {
           <div>
             <input
               type="text"
-              value={adress}
-              onChange={(e) => setAdress(e.target.value)}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className={inputStyle}
-              placeholder="Adress"
+              placeholder="Address"
             />
           </div>
           <div>

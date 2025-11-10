@@ -8,6 +8,7 @@ import {
   TittleCard,
 } from "../../styles/Cards.jsx";
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function UpcomingGames({ setHasGames }) {
   const { isDark } = useAppContext();
@@ -17,7 +18,7 @@ function UpcomingGames({ setHasGames }) {
   const [error, setError] = React.useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/users/play-in", {
+    fetch(`${API_BASE_URL}/participations/my-acepted-participations`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -32,9 +33,10 @@ function UpcomingGames({ setHasGames }) {
       .then((data) => {
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
+    
         console.log(data);
         const gamesFiltrados = data.filter((game) => {
-          const fechaJuego = new Date(game.game.reservation.date + "T00:00:00");
+          const fechaJuego = new Date(game.game.date + "T00:00:00");
           return fechaJuego >= hoy;
         });
         if (gamesFiltrados.length === 0) {
@@ -90,25 +92,25 @@ function UpcomingGames({ setHasGames }) {
           >
             <p className={inputStyle}>
               <strong className={colorStrong}>Fecha:</strong>{" "}
-              {game.game.reservation.date}
+              {game.game.date}
             </p>
             <p className={inputStyle}>
               <strong className={colorStrong}>Hora:</strong>{" "}
-              {game.game.reservation.schedule.schedule}
+              {game.game.schedule}
               :00hs
             </p>
             <p className={inputStyle}>
               <strong className={colorStrong}>Cancha:</strong>{" "}
-              {game.game.reservation.fieldType.property.zone} -{" "}
-              {game.game.reservation.fieldType.property.adress}
+              {game.game.propertyName} -{" "}
+              {game.game.propertyAdress}
             </p>
             <p className={inputStyle}>
               <strong className={colorStrong}>Creador:</strong>{" "}
-              {game.game.userCreator.name}
+              {game.game.creator.name}
             </p>
             <p className={inputStyle}>
               <strong className={colorStrong}>Tipo de cancha:</strong>{" "}
-              {game.game.reservation.fieldType.field_type}
+              {game.game.field}
             </p>
           </li>
         ))}
