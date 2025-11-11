@@ -8,8 +8,9 @@ import { useAppContext } from "../../../../context/AppContext.jsx";
 
 import Button from "../../../styles/Button.jsx";
 import { AuthenticationContext } from "../../../services/auth.context.jsx";
-import { RxCross1 } from "react-icons/rx";
+import { RxCross1, RxVercelLogo } from "react-icons/rx";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
+import { API_BASE_URL } from "../../../../config/api.js";
 
 function PropertySchedules() {
   const { isDark } = useAppContext();
@@ -24,8 +25,9 @@ function PropertySchedules() {
   const [missingPlayers, setMissingPlayers] = useState(5);
 
   const getFieldsSchedules = (actualDate) => {
+    console.log(actualDate)
     fetch(
-      `http://localhost:8080/api/properties/property-schedules?date=${actualDate}&pid=${pid}`,
+      `${API_BASE_URL}/properties/property-schedules?propertyId=${pid}&date=${actualDate}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +40,10 @@ function PropertySchedules() {
           throw new Error("Error al obtener los horarios de la cancha");
         return res.json();
       })
-      .then((data) => setFieldSchedules(data))
+      .then((data) => {
+        setFieldSchedules(data)
+        console.log(data)
+      })
       .catch((err) =>
         errorToast(err.message || "Error al obtener los horarios")
       );
@@ -57,7 +62,7 @@ function PropertySchedules() {
   };
 
   const createGame = (mp) => {
-    fetch("http://localhost:8080/api/games", {
+    fetch(`${API_BASE_URL}/games`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,8 +70,8 @@ function PropertySchedules() {
       },
       body: JSON.stringify({
         property_id: Number(pid),
-        schedule: selected.id_sch,
-        field_type: selected.id_field,
+        schedule_id: selected.id_sch,
+        field_id: selected.id_field,
         date,
         missing_players: mp,
       }),
@@ -140,9 +145,9 @@ function PropertySchedules() {
               Seleccione un horario disponible
             </h2>
             {fieldSchedules.map((field) => (
-              <div key={field.id} className="mb-8">
+              <div key={field.fieldId} className="mb-8">
                 <span className="text-sm font-semibold text-white bg-gray-700 px-3 py-1 rounded-md">
-                  F{field.field_type}
+                  F{field.fieldType}
                 </span>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
                   <ul
@@ -150,10 +155,10 @@ function PropertySchedules() {
                       isDark ? "text-white" : "text-black"
                     }`}
                   >
-                    {field.schedule.map((sch) => {
+                    {field.schedules.map((sch) => {
                       const isSelected =
-                        Number(sch.id) === Number(selected.id_sch) &&
-                        Number(field.id) === Number(selected.id_field);
+                        Number(sch.scheduleId) === Number(selected.id_sch) &&
+                        Number(field.fieldId) === Number(selected.id_field);
 
                       const baseClasses =
                         "relative list-none px-4 py-3 text-xs font-semibold rounded border-2 transition-all ";
@@ -168,13 +173,13 @@ function PropertySchedules() {
 
                       return (
                         <li
-                          key={sch.id}
+                          key={sch.scheduleId}
                           className={`${baseClasses} ${availabilityClasses} ${selectedClasses}`}
                           onClick={() => {
                             if (sch.available) {
                               setSelected({
-                                id_field: Number(field.id),
-                                id_sch: Number(sch.id),
+                                id_field: Number(field.fieldId),
+                                id_sch: Number(sch.scheduleId),
                               });
                             }
                           }}

@@ -24,7 +24,7 @@ function PropertyItem({ property }) {
           isDark ? "text-white" : "text-black"
         } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
       >
-        <strong className={colorStrong}>Dirección:</strong> {property.adress}
+        <strong className={colorStrong}>Dirección:</strong> {property.address}
       </p>
       <p
         className={`text-xs ${
@@ -40,7 +40,7 @@ function PropertyItem({ property }) {
         } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
       >
         <strong className={colorStrong}>Canchas disponibles:</strong>{" "}
-        {property.fields.map((fld) => fld.field_type).join(" - ")}
+        {property.fields.map((fld) => fld.field).join(" - ")}
       </p>
       <p
         className={`text-xs ${
