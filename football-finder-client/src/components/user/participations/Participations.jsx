@@ -43,11 +43,11 @@ function Participations() {
         setLoadingInv(false);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         setError(err.message);
         setLoadingApp(false);
       });
-    })
+  });
 
   const handleInvitationAccepted = (id) => {
     setInvitations((prev) => prev.filter((inv) => inv.id !== id));
@@ -99,7 +99,13 @@ function Participations() {
           }`}
         >
           {applications.length > 0 && (
-            <div className="w-full">
+            <div
+              className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
+                isDark
+                  ? "bg-gradient-to-r from-black via-gray-900 to-black"
+                  : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
+              }`}
+            >
               <h2
                 className={`text-lg font-semibold mb-4 ${
                   isDark ? "text-white" : "text-gray-900"
