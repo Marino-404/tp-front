@@ -5,13 +5,17 @@ import Button1 from "../../styles/Button1";
 import { colorStrong } from "../../styles/Cards";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 
+import { useAppContext } from "../../../context/AppContext";
+import { API_BASE_URL } from "../../../config/api";
+
 function InvItem({ inv, onAccept }) {
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
+  const { isDark } = useAppContext();
 
   const handleAcept = () => {
     fetch(
-      `http://localhost:8080/api/participations/acepted-invitation/${inv.id}`,
+      `${API_BASE_URL}/participations/handle/${inv.id}?newState=aceptada`,
       {
         method: "POST",
         headers: {
@@ -52,7 +56,7 @@ function InvItem({ inv, onAccept }) {
         } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
       >
         <strong className={colorStrong}>Te invitó:</strong>{" "}
-        {inv.gameInvited.userCreator.name}
+        {inv.game.creator.name}
       </p>
       <p
         className={`text-xs ${
@@ -60,8 +64,8 @@ function InvItem({ inv, onAccept }) {
         } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
       >
         <strong className={colorStrong}>Día y hora:</strong>{" "}
-        {inv.gameInvited.reservation.date} -{" "}
-        {inv.gameInvited.reservation.schedule.schedule}hs
+        {inv.game.date} -{" "}
+        {inv.game.schedule}hs
       </p>
       <p
         className={`text-xs ${
@@ -69,15 +73,15 @@ function InvItem({ inv, onAccept }) {
         } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
       >
         <strong className={colorStrong}>Cancha:</strong>{" "}
-        {inv.gameInvited.reservation.schedule.property.zone} -{" "}
-        {inv.gameInvited.reservation.schedule.property.adress}
+        {inv.game.propertyZone} -{" "}
+        {inv.game.propertyAdress}
       </p>
 
       <Button1
         onClick={() =>
           show({
             title: "¿Aceptar invitación?",
-            message: `¿Estás seguro que deseas aceptar la invitación de ${inv.gameInvited.userCreator.name}?`,
+            message: `¿Estás seguro que deseas aceptar la invitación de ${inv.game.creator.name}?`,
             confirmText: "Aceptar",
             cancelText: "Cancelar",
             onConfirm: handleAcept,

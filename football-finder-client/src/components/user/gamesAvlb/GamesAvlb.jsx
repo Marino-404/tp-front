@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import SearchInput from "../../searchInput/SearchInput.jsx";
 import { TittleCard } from "../../styles/Cards.jsx";
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function GamesAvlb() {
   const [games, setGames] = useState([]);
@@ -24,7 +25,7 @@ function GamesAvlb() {
 
     const decoded = jwtDecode(token);
 
-    fetch("http://localhost:8080/api/games/availables", {
+    fetch(`${API_BASE_URL}/games`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -41,9 +42,12 @@ function GamesAvlb() {
         return res.json();
       })
       .then((data) => {
+        console.log(data)
+        console.log(decoded.id)
         const filteredGames = data.filter(
-          (game) => game.id_user_creator !== decoded.id
+          (game) => game.creator.id != decoded.id
         );
+        console.log(filteredGames)
         setGames(filteredGames);
         setFilteredGames(filteredGames);
         setLoading(false);
@@ -100,15 +104,15 @@ function GamesAvlb() {
     }
     const filtered = games.filter(
       (game) =>
-        game.userCreator.name.toLowerCase().includes(query.toLowerCase()) ||
-        game.reservation.fieldType.property.name
+        game.creator.name.toLowerCase().includes(query.toLowerCase()) ||
+        game.propertyName
           .toLowerCase()
           .includes(query.toLowerCase()) ||
-        game.reservation.fieldType.field_type
+        game.field
           .toLowerCase()
           .includes(query.toLowerCase()) ||
-        game.reservation.date.toLowerCase().includes(query.toLowerCase()) ||
-        game.reservation.fieldType.property.zone
+        game.date.toLowerCase().includes(query.toLowerCase()) ||
+        game.propertyZone
           .toLowerCase()
           .includes(query.toLowerCase())
     );

@@ -4,6 +4,7 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 import { CardContainer } from "../../styles/Cards.jsx";
 import { TittleCard } from "../../styles/Cards.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function ListaUsuarios() {
   const [users, setUsers] = useState([]);
@@ -18,7 +19,7 @@ function ListaUsuarios() {
       setLoading(false);
       return;
     }
-    fetch("http://localhost:8080/api/users", {
+    fetch(`${API_BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

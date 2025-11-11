@@ -3,6 +3,7 @@ import { AuthenticationContext } from "../../services/auth.context";
 import PropertyItem from "./PropertyItem";
 import { ContainerStyle } from "../../styles/Container.jsx";
 import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 const ListaPredios = () => {
   const [predios, setPredios] = useState([]);
@@ -12,7 +13,7 @@ const ListaPredios = () => {
   useEffect(() => {
     const fetchPredios = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/properties", {
+        const res = await fetch(`${API_BASE_URL}/properties`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

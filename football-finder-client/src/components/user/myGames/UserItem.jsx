@@ -31,11 +31,11 @@ function UserItem({ user }) {
         body: JSON.stringify(participationData),
       }
     )
-      .then((res) => {
+      .then(async (res) => {
         if (!res.ok) {
-          return res.json().then((data) => {
-            throw new Error(data.message || "Error al obtener los partidos");
-          });
+        const errorData = await res.json(); 
+        console.log("Error del backend:", errorData);
+        throw new Error(errorData.detail || "Error al enviar la invitación");
         }
         successToast("¡Invitación enviada!");
       })

@@ -6,6 +6,7 @@ import InvItem from "./InvItem.jsx";
 import AppItem from "./AppItem.jsx";
 import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function Participations() {
   const { isDark } = useAppContext();
@@ -16,7 +17,7 @@ function Participations() {
   const [loadingInv, setLoadingInv] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch("http://localhost:8080/api/participations/my-applications", {
+    fetch(`${API_BASE_URL}/participations/my-participations`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -24,47 +25,29 @@ function Participations() {
     })
       .then((res) => {
         if (!res.ok) {
-          errorToast("Error al obtener las postulaciones");
+          errorToast("Error al obtener las participaciones");
           return;
         }
         return res.json();
       })
       .then((data) => {
-        const filteredApplications = data.filter(
+        const filteredApplications = data.applications.filter(
+          (app) => app.state == "pendiente"
+        );
+        const filteredInvitations = data.invitations.filter(
           (app) => app.state == "pendiente"
         );
         setApplications(filteredApplications);
-        setLoadingApp(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoadingApp(false);
-      });
-    fetch("http://localhost:8080/api/participations/my-invitations", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          errorToast("Error al obtener las invitaciones");
-          return;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const filteredInvitations = data.filter(
-          (inv) => inv.state == "pendiente"
-        );
         setInvitations(filteredInvitations);
+        setLoadingApp(false);
         setLoadingInv(false);
       })
       .catch((err) => {
+        console.log(err)
         setError(err.message);
-        setLoadingInv(false);
+        setLoadingApp(false);
       });
-  }, []);
+    })
 
   const handleInvitationAccepted = (id) => {
     setInvitations((prev) => prev.filter((inv) => inv.id !== id));

@@ -5,6 +5,7 @@ import RedButton from "../../styles/RedButton.jsx";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
 
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { API_BASE_URL } from "../../../config/api.js";
 
 const GameItem = ({ game }) => {
   const { token } = useContext(AuthenticationContext);
@@ -23,7 +24,7 @@ const GameItem = ({ game }) => {
       onConfirm: async () => {
         try {
           const res = await fetch(
-            `http://localhost:8080/api/games/${game.id}`,
+            `${API_BASE_URL}/games/${game.id}`,
             {
               method: "DELETE",
               headers: {
@@ -48,25 +49,25 @@ const GameItem = ({ game }) => {
   return (
     <div className="flex flex-col items-start justify-start w-full">
       <div className="flex flex-col w-full">
-        <span className={TittleCard}>{game.userCreator.name}</span>
+        <span className={TittleCard}>{game.creator.name}</span>
         <span className={inputStyle}>
           <strong className={inputStyle}>
-            {game.reservation.fieldType.property.name}
+            {game.propertyName}
           </strong>
         </span>
       </div>
       <div className="flex flex-col w-full">
         <p className={inputStyle}>
           <strong className={colorStrong}>Date:</strong>
-          {game.reservation.date} - {game.reservation.schedule.schedule} hs
+          {game.date} - {game.schedule} hs
         </p>
         <p className={inputStyle}>
           <strong className={colorStrong}>Zone:</strong>
-          {game.reservation.fieldType.property.zone}
+          {game.propertyZone}
         </p>
         <p className={inputStyle}>
           <strong className={colorStrong}>Adress:</strong>
-          {game.reservation.fieldType.property.adress}
+          {game.propertyAdress}
         </p>
       </div>
       <RedButton onClick={handleDelete}>Borrar</RedButton>
