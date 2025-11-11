@@ -5,6 +5,7 @@ import Button from "../../styles/Button.jsx";
 import useConfirmModal from "../../../hooks/useConfirmModal.jsx";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { successToast, errorToast } from "../../toast/NotificationToast.jsx";
+import {API_BASE_URL} from '../../../config/api.js';
 
 const ExternalGameForm = () => {
   const { isDark } = useAppContext();
@@ -13,11 +14,13 @@ const ExternalGameForm = () => {
   const { show, Modal } = useConfirmModal();
 
   const [formData, setFormData] = useState({
-    fieldName: "",
+    propertyName: "",
+    propertyAdress: "",
+    propertyZone: "",
     date: "",
-    time: "",
+    schedule: "",
     fieldType: "",
-    missingPlayers: 1,
+    missing_players: 1,
   });
 
   const handleChange = (e) => {
@@ -26,21 +29,24 @@ const ExternalGameForm = () => {
   };
 
   const createExternalGame = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/games/external`, {
+    fetch(`${API_BASE_URL}/games/external-reservation`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        field_name: formData.fieldName,
+        propertyName: formData.propertyName,
+        propertyAdress: formData.propertyAdress,
+        propertyZone: formData.propertyZone,
         date: formData.date,
-        time: formData.time,
-        field_type: formData.fieldType,
-        missing_players: Number(formData.missingPlayers),
+        schedule: Number(formData.schedule),
+        fieldType: Number(formData.fieldType),
+        missing_players: Number(formData.missing_players),
       }),
     })
       .then((res) => {
+        console.log(formData.date)
         if (!res.ok) {
           return res.json().then((data) => {
             throw new Error(
@@ -54,7 +60,10 @@ const ExternalGameForm = () => {
         successToast("Partido externo creado correctamente");
         navigate("/user/my-games", { replace: true });
       })
-      .catch((err) => errorToast(err.message));
+      .catch((err) => {
+        errorToast(err.message)
+        console.log(err)
+      });
   };
 
   const handleSubmit = (e) => {
@@ -97,7 +106,7 @@ const ExternalGameForm = () => {
 
         <form onSubmit={handleSubmit} className="w-full">
           <label
-            htmlFor="fieldName"
+            htmlFor="propertyName"
             className={`block text-sm font-semibold ${
               isDark ? "text-white" : "text-black"
             } mb-2`}
@@ -105,10 +114,47 @@ const ExternalGameForm = () => {
             Nombre del predio
           </label>
           <input
-            id="fieldName"
-            name="fieldName"
+            id="propertyName"
+            name="propertyName"
             placeholder="Tifosi"
-            value={formData.fieldName}
+            value={formData.propertyName}
+            onChange={handleChange}
+            className={`text-xs ${
+              isDark ? "text-white" : "text-black"
+            } font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none rounded-none`}
+          />
+          <label
+            htmlFor="propertyZone"
+            className={`block text-sm font-semibold ${
+              isDark ? "text-white" : "text-black"
+            } mb-2`}
+          >
+            Zona del predio
+          </label>
+          <input
+            id="propertyZone"
+            name="propertyZone"
+            placeholder="Rosario"
+            value={formData.propertyZone}
+            onChange={handleChange}
+            className={`text-xs ${
+              isDark ? "text-white" : "text-black"
+            } font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none rounded-none`}
+          />
+
+          <label
+            htmlFor="propertyAdress"
+            className={`block text-sm font-semibold ${
+              isDark ? "text-white" : "text-black"
+            } mb-2`}
+          >
+            Direccion del predio
+          </label>
+          <input
+            id="propertyAdress"
+            name="propertyAdress"
+            placeholder="Alguna Calle 1234"
+            value={formData.propertyAdress}
             onChange={handleChange}
             className={`text-xs ${
               isDark ? "text-white" : "text-black"
@@ -174,7 +220,9 @@ const ExternalGameForm = () => {
           >
             <option value="">Seleccioná el tipo de cancha</option>
             <option value="5">Cancha de 5</option>
+            <option value="6">Cancha de 6</option>
             <option value="7">Cancha de 7</option>
+            <option value="9">Cancha de 9</option>
             <option value="11">Cancha de 11</option>
           </select>
 

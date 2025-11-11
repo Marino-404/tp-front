@@ -3,6 +3,7 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import SearchInput from "../../searchInput/SearchInput.jsx";
 import PropertyItem from "./PropertyItem.jsx";
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 const CreateGame = () => {
   const [query, setQuery] = useState("");
@@ -15,7 +16,7 @@ const CreateGame = () => {
 
   const { isDark } = useAppContext();
   useEffect(() => {
-    fetch("http://localhost:8080/api/properties", {
+    fetch(`${API_BASE_URL}/properties`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -28,6 +29,7 @@ const CreateGame = () => {
         return res.json();
       })
       .then((data) => {
+        console.log(data)
         setProperties(data);
         setFilteredPropertiles(data);
         setLoading(false);
@@ -72,10 +74,10 @@ const CreateGame = () => {
     const filteredProperties = properties.filter(
       (pro) =>
         pro.zone.toLowerCase().includes(query.toLowerCase()) ||
-        pro.adress.toLowerCase().includes(query.toLowerCase()) ||
+        pro.address.toLowerCase().includes(query.toLowerCase()) ||
         pro.name.toLowerCase().includes(query.toLowerCase()) ||
         pro.fields.some((field) => {
-          return field.field_type.includes(query);
+          return field.field.includes(query);
         }) ||
         pro.schedules.some((sch) => {
           return sch.schedule.toString().includes(query);
