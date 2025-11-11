@@ -5,19 +5,28 @@ import { inputStyle, colorStrong } from "../../styles/Cards.jsx";
 import Button1 from "../../styles/Button1.jsx";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import { useAppContext } from "../../../context/AppContext.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
+import { jwtDecode } from "jwt-decode";
 
 const GameItem = ({ game }) => {
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
   const { isDark } = useAppContext();
+  const decoded = jwtDecode(token);
 
   const handleApply = async () => {
-    fetch(`http://localhost:8080/api/participations/application/${game.id}`, {
+    const participationData = {
+      GameId: game.id,
+      UserId: decoded.id,
+      Type : "postulacion"
+    };
+    fetch(`${API_BASE_URL}/participations`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(participationData),
     })
       .then((response) => {
         if (!response.ok) {
@@ -61,7 +70,7 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Creador: </strong>
-              {game.userCreator.name}
+              {game.creator.name}
             </li>
             <li
               className={`text-xs ${
@@ -69,7 +78,7 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Predio: </strong>
-              {game.reservation.fieldType.property.name}
+              {game.propertyName}
             </li>
             <li
               className={`text-xs ${
@@ -77,7 +86,7 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Fecha: </strong>
-              {game.reservation.date}
+              {game.date}
             </li>
             <li
               className={`text-xs ${
@@ -85,7 +94,7 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Hora: </strong>
-              {game.reservation.schedule.schedule} hs
+              {game.schedule} hs
             </li>
             <li
               className={`text-xs ${
@@ -93,7 +102,7 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Zona: </strong>
-              {game.reservation.fieldType.property.zone}
+              {game.propertyZone}
             </li>
             <li
               className={`text-xs ${
@@ -101,7 +110,7 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Cancha: </strong>
-              {game.reservation.fieldType.field_type}
+              {game.field}
             </li>
             <li
               className={`text-xs ${
@@ -109,12 +118,12 @@ const GameItem = ({ game }) => {
               } font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
             >
               <strong className={colorStrong}>Dirección: </strong>
-              {game.reservation.fieldType.property.adress}
+              {game.propertyAdress}
             </li>
             <Button1
               onClick={() =>
                 show({
-                  title: `¿Estás seguro que deseas postularte al partido de ${game.userCreator.name}?`,
+                  title: `¿Estás seguro que deseas postularte al partido de ${game.creator.name}?`,
                   message: "Una vez enviado, el creador decidirá si aceptarte.",
                   confirmText: "Postularme",
                   cancelText: "Cancelar",
