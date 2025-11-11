@@ -12,9 +12,10 @@ import {
 } from "../../styles/Cards.jsx";
 
 import useConfirmModal from "../../../hooks/useConfirmModal"; // <-- importamos el hook
+import { API_BASE_URL } from "../../../config/api.js";
 
 const UserItem = ({ user, onUserDelete }) => {
-  const [role, setRole] = useState(user.rol);
+  const [role, setRole] = useState(user.role);
   const { token } = useContext(AuthenticationContext);
 
   // Usamos el hook
@@ -33,21 +34,18 @@ const UserItem = ({ user, onUserDelete }) => {
       errorToast("Rol invalido");
       return;
     }
-    fetch(`http://localhost:8080/api/users/rolechange/${user.id}`, {
+    fetch(`${API_BASE_URL}/users/rolechange/${user.id}/${role}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        role: role,
-      }),
     })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed");
         }
-        return res.json(); // <-- corregí: falta paréntesis para llamar la función json
+        return res.text(); // <-- corregí: falta paréntesis para llamar la función json
       })
       .then((data) => {
         successToast("Rol updated!");
@@ -60,7 +58,7 @@ const UserItem = ({ user, onUserDelete }) => {
   };
 
   const deleteUser = () => {
-    fetch(`http://localhost:8080/api/users/delete/${user.id}`, {
+    fetch(`${API_BASE_URL}/users/delete/${user.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

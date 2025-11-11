@@ -3,6 +3,7 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import GameItem from "./GameItem.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 import { CardContainer } from "../../styles/Cards.jsx";
+import { API_BASE_URL } from "../../../config/api.js";
 
 function ListaGames() {
   const [games, setGames] = useState([]);
@@ -16,7 +17,7 @@ function ListaGames() {
       setLoading(false);
       return;
     }
-    fetch("http://localhost:8080/api/games/availables", {
+    fetch(`${API_BASE_URL}/games`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
