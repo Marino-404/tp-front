@@ -58,7 +58,7 @@ function UsersList() {
       setFilteredUsers(users);
       return;
     }
-    console.log(users)
+    console.log(users);
     const filteredUsers = users.filter(
       (user) =>
         user.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -108,13 +108,13 @@ function UsersList() {
       }`}
     >
       <SearchInput query={query} setQuery={handleChangeQuery} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 mt-15 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-7xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-7xl mx-auto mt-16">
         {filteredUsers.map((user) => (
           <div
             key={user.id}
             className={`flex flex-col items-start ${
               isDark ? "bg-white/10" : "bg-gray-200"
-            } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+            } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 transition-transform hover:scale-105`}
           >
             <UserItem user={user} />
           </div>

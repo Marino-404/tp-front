@@ -1,7 +1,5 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import NavBar from "../../navbar/NavBar";
-
 
 import Profile from "../profile/Profile.jsx";
 import UpdateForm from "../profile/UpdateForm.jsx";
@@ -11,6 +9,8 @@ import MyGames from "../myGames/MyGames.jsx";
 import UsersList from "../myGames/UsersList.jsx";
 import CreateGame from "../createGame/CreateGame.jsx";
 import PropertySchedules from "../createGame/propertySchedules/PropertySchedules.jsx";
+import SelectGameType from "../createGame/SelectGameType.jsx";
+import ExternalGameForm from "../createGame/ExternalGameForm.jsx";
 
 const UserDashboard = () => {
   return (
@@ -26,8 +26,10 @@ const UserDashboard = () => {
       />
 
       <Routes>
-        <Route index element={<CreateGame />} />
-        <Route path="reservation/:pid" element={<PropertySchedules />}/>
+        <Route index element={<SelectGameType />} />
+        <Route path="create-game/app" element={<CreateGame />} />
+        <Route path="create-game/external" element={<ExternalGameForm />} />
+        <Route path="reservation/:pid" element={<PropertySchedules />} />
         <Route path="profile" element={<Profile />} />
         <Route path="update/:uid" element={<UpdateForm />} />
         <Route path="availables-games" element={<GamesAvlb />} />
