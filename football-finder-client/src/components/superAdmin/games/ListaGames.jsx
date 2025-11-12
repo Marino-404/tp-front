@@ -38,6 +38,10 @@ function ListaGames() {
         setLoading(false);
       });
   }, []);
+
+  const onDelete = (gameId) => {
+    setGames((prevGames) => prevGames.filter((game) => game.id !== gameId));
+  }
   if (loading)
     return (
       <div className={ContainerStyle}>
@@ -58,7 +62,7 @@ function ListaGames() {
           className="flex flex-col mb-6 items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2"
           key={game.id}
         >
-          <GameItem game={game} />
+          <GameItem game={game} onDelete={onDelete} />
         </div>
       ))}
     </div>

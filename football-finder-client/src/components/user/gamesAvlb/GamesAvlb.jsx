@@ -102,15 +102,14 @@ function GamesAvlb() {
       setFilteredGames(games);
       return;
     }
+    console.log(games)
     const filtered = games.filter(
       (game) =>
         game.creator.name.toLowerCase().includes(query.toLowerCase()) ||
         game.propertyName
           .toLowerCase()
           .includes(query.toLowerCase()) ||
-        game.field
-          .toLowerCase()
-          .includes(query.toLowerCase()) ||
+        game.field == query.toLowerCase() ||
         game.date.toLowerCase().includes(query.toLowerCase()) ||
         game.propertyZone
           .toLowerCase()
