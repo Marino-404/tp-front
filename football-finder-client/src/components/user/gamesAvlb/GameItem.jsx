@@ -32,7 +32,7 @@ const GameItem = ({ game }) => {
         if (!response.ok) {
           if (response.status === 400) {
             return response.json().then((data) => {
-              throw new Error(data.message || "Error al aplicar para el juego");
+              throw new Error(data.detail || "Error al aplicar para el juego");
             });
           }
           throw new Error("Error al aplicar para el juego");

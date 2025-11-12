@@ -18,7 +18,7 @@ const ExternalGameForm = () => {
     propertyAdress: "",
     propertyZone: "",
     date: "",
-    schedule: "",
+    schedule: 0,
     fieldType: "",
     missing_players: 1,
   });
@@ -40,7 +40,7 @@ const ExternalGameForm = () => {
         propertyAdress: formData.propertyAdress,
         propertyZone: formData.propertyZone,
         date: formData.date,
-        schedule: Number(formData.schedule),
+        schedule: formData.schedule,
         fieldType: Number(formData.fieldType),
         missing_players: Number(formData.missing_players),
       }),
@@ -49,8 +49,9 @@ const ExternalGameForm = () => {
         console.log(formData.date)
         if (!res.ok) {
           return res.json().then((data) => {
+            console.log(data)
             throw new Error(
-              data.message || "Error al crear el partido externo"
+              data.detail || "Error al crear el partido externo"
             );
           });
         }
@@ -69,13 +70,13 @@ const ExternalGameForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (formData.missingPlayers <= 0 || formData.missingPlayers > 10) {
+    if (formData.missing_players <= 0 || formData.missing_players > 10) {
       return errorToast("Ingresá un número válido de jugadores (1-10)");
     }
 
     show({
       title: "¿Deseás crear este partido externo?",
-      message: `Predio: ${formData.fieldName}\nFecha: ${formData.date} ${formData.time}\nCancha: ${formData.fieldType}\nJugadores faltantes: ${formData.missingPlayers}`,
+      message: `Predio: ${formData.propertyName}\nFecha: ${formData.date} ${formData.schedule}\nCancha: ${formData.fieldType}\nJugadores faltantes: ${formData.missing_players}`,
       confirmText: "Crear partido",
       cancelText: "Cancelar",
       onConfirm: createExternalGame,
@@ -182,23 +183,29 @@ const ExternalGameForm = () => {
 
           {/* Horario */}
           <label
-            htmlFor="time"
+            htmlFor="schedule"
             className={`block text-sm font-semibold ${
               isDark ? "text-white" : "text-black"
             } mb-2`}
           >
             Horario
           </label>
-          <input
-            type="time"
-            id="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className={`text-xs ${
-              isDark ? "text-white" : "text-black"
-            } font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none rounded-none`}
-          />
+         <select
+          id="schedule"
+          name="schedule"
+          value={formData.schedule}
+          onChange={handleChange}
+          className={`text-xs ${
+              isDark ? "text-white bg-gray-800" : "text-black bg-gray-200"
+            } font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 outline-none rounded-none`}
+          >
+          <option value="">Seleccioná el horario</option>
+          {[...Array(24).keys()].map((hour) => (
+              <option key={hour} value={hour}>
+                  {hour.toString().padStart(2, "0")}:00 hs
+              </option>
+          ))}
+          </select>
 
           {/* Tipo de cancha */}
           <label
@@ -237,12 +244,12 @@ const ExternalGameForm = () => {
           </label>
           <input
             type="number"
-            id="missingPlayers"
-            name="missingPlayers"
+            id="missing_players"
+            name="missing_players"
             placeholder="Ej: 3"
             min="1"
             max="10"
-            value={formData.missingPlayers}
+            value={formData.missing_players}
             onChange={handleChange}
             className={`text-xs ${
               isDark ? "text-white" : "text-black"

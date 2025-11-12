@@ -7,7 +7,7 @@ import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import { API_BASE_URL } from "../../../config/api.js";
 
-const GameItem = ({ game }) => {
+const GameItem = ({ game, onDelete }) => {
   const { token } = useContext(AuthenticationContext);
   const { Modal, show } = useConfirmModal();
   const handleDelete = () => {
@@ -37,7 +37,7 @@ const GameItem = ({ game }) => {
             throw new Error("Failed to delete game");
           }
           successToast("Game deleted successfully");
-          window.location.reload();
+          onDelete(game.id);
         } catch (err) {
           console.error("Error deleting game:", err);
           errorToast(err.message || "Error deleting game");
