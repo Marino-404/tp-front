@@ -71,7 +71,6 @@ function MyGames() {
       </div>
     );
 
-
   return (
     <div
       className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${

@@ -18,7 +18,7 @@ const GameItem = ({ game }) => {
     const participationData = {
       GameId: game.id,
       UserId: decoded.id,
-      Type : "postulacion"
+      Type: "postulacion",
     };
     fetch(`${API_BASE_URL}/participations`, {
       method: "POST",
