@@ -76,7 +76,6 @@ function MyGames() {
       </div>
     );
 
-
   return (
     <div
       className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
@@ -169,12 +168,12 @@ function MyGames() {
                   {game.players.map((user) => (
                     <li
                       key={user.id}
-                      className="text-xs text-white font-bold w-full py-3  mb-2 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none"
+                      className={`text-xs ${
+                        isDark ? "text-white" : "text-black"
+                      } font-bold w-full py-3  mb-2 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none`}
                     >
                       {user.name}{" "}
-                      <strong className={colorStrong}>
-                        ({user.email})
-                      </strong>
+                      <strong className={colorStrong}>({user.email})</strong>
                     </li>
                   ))}
                 </ul>

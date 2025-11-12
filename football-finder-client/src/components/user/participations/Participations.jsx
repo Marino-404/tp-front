@@ -100,11 +100,9 @@ function Participations() {
         >
           {applications.length > 0 && (
             <div
-              className={`flex flex-col items-center justify-start w-full min-h-screen pt-32 pb-28 px-4 ${
-                isDark
-                  ? "bg-gradient-to-r from-black via-gray-900 to-black"
-                  : "bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400"
-              }`}
+              className={`flex flex-col items-start ${
+                isDark ? "bg-white/10" : "bg-gray-200"
+              } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
             >
               <h2
                 className={`text-lg font-semibold mb-4 ${
@@ -127,7 +125,11 @@ function Participations() {
           )}
 
           {invitations.length > 0 && (
-            <div className="w-full max-w-4xl mt-8">
+            <div
+              className={`flex flex-col items-start ${
+                isDark ? "bg-white/10" : "bg-gray-200"
+              } backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2 mt-15`}
+            >
               <h2
                 className={`text-lg font-semibold mb-4 ${
                   isDark ? "text-white" : "text-gray-900"
@@ -135,7 +137,7 @@ function Participations() {
               >
                 Invitaciones
               </h2>
-              <ul className="flex flex-col gap-6">
+              <ul className="flex flex-col items-start justify-start w-full gap-6">
                 {invitations.map((inv) => (
                   <li
                     key={inv.id}
