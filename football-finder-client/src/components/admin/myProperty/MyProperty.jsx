@@ -11,7 +11,7 @@ import {
 } from "../../styles/Cards.jsx";
 import { API_BASE_URL } from "../../../config/api.js";
 
-function MyProperty({ setHasProperty }) {
+function MyProperty({ setHasProperty, setPid }) {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,6 +36,7 @@ function MyProperty({ setHasProperty }) {
       .then((data) => {
         if (data) {
           setProperty(data);
+          setPid(data.id);
           setLoading(false);
         }
       })

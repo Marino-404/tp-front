@@ -56,7 +56,7 @@ const Login = ({ setIsLogged }) => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        errorToast(errorData.message || "Error al iniciar sesión");
+        errorToast(errorData.detail || "Error al iniciar sesión");
         return;
       }
 

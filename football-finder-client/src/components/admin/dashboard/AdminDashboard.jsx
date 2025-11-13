@@ -10,6 +10,7 @@ import MarkReservedSchedules from "../markReserved/MarkReservedSchedules.jsx";
 
 const AdminDashboard = () => {
   const [hasProperty, setHasProperty] = useState(true);
+  const [pid, setPid]= useState(null);
 
   if (hasProperty) {
     return (
@@ -19,20 +20,20 @@ const AdminDashboard = () => {
             { item: "Mi Propiedad", url: "/admin" },
             { item: "Juegos Agendados", url: "/admin/schedule-games" },
             { item: "Reservas en espera", url: "/admin/pending-reservations" },
-            { item: "Marcar horarios reservados", url: "/admin/mark-reserved" },
+            { item: "Marcar horarios reservados", url: `/admin/mark-reserved/${pid}` },
           ]}
         />
 
         <Routes>
           <Route
             index
-            element={<MyProperty setHasProperty={setHasProperty} />}
+            element={<MyProperty setHasProperty={setHasProperty} setPid={setPid}/>}
           />
 
           <Route path="schedule-games" element={<GamesList />} />
           <Route path="pending-reservations" element={<PendingList />} />
           <Route path="update/:pid" element={<UpdateForm />} />
-          <Route path="mark-reserved" element={<MarkReservedSchedules />} />
+          <Route path="mark-reserved/:pid" element={<MarkReservedSchedules />} />
         </Routes>
       </>
     );
