@@ -93,15 +93,15 @@ const Login = ({ setIsLogged }) => {
             onClick={toggleTheme}
             aria-label="Cambiar tema"
             className={`absolute bottom-12 left-12 flex items-center w-14 h-7 rounded-full transition-colors duration-500 cursor-pointer
-                        ${isDark ? "bg-gray-300" : "bg-gray-700"}`}
+                  ${isDark ? "bg-gray-300" : "bg-gray-700"}`}
           >
             <span
               className={`absolute flex items-center justify-center w-6 h-6 rounded-full shadow-md transform transition-transform duration-500
-                          ${
-                            isDark
-                              ? "translate-x-7 bg-gray-700"
-                              : "translate-x-1 bg-gray-300"
-                          }`}
+                    ${
+                      isDark
+                        ? "translate-x-7 bg-gray-700"
+                        : "translate-x-1 bg-gray-300"
+                    }`}
             >
               {isDark ? (
                 <MdOutlineLightMode className="text-yellow-400 text-[16px]" />
@@ -111,15 +111,12 @@ const Login = ({ setIsLogged }) => {
             </span>
           </button>
         </li>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
+
+        <img
+          src="/loginyregister.jpg"
+          alt="background"
           className="absolute top-0 left-0 w-full h-full object-cover z-[-1] grayscale brightness-[0.3]"
-        >
-          <source src="/video1.mp4" type="video/mp4" />
-        </video>
+        />
       </div>
 
       <div
