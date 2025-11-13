@@ -7,7 +7,7 @@ import {
 import { AuthenticationContext } from "../services/auth.context";
 import { useContext, useState } from "react";
 import ConfirmModal from "../modal/ConfirmModal.jsx";
-import { useAppContext } from "../../context/AppContext.jsx"; // 👈 importamos el store global
+import { useAppContext } from "../../context/AppContext.jsx";
 
 const NavBar = ({ links = [] }) => {
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ const NavBar = ({ links = [] }) => {
   const { handleUserLogout } = useContext(AuthenticationContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 👇 usamos el contexto global
   const { isDark, toggleTheme } = useAppContext();
 
   const handleLogoutClick = () => setIsModalOpen(true);

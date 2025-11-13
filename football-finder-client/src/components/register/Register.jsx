@@ -6,15 +6,19 @@ import {
   validatePassword,
   validateString,
 } from "../auth/auth.services";
-import { errorToast, successToast } from "../toast/NotificationToast";
+import { errorToast } from "../toast/NotificationToast";
 import Button1 from "../styles/Button1";
 import Button from "../styles/Button";
-import { jwtDecode } from "jwt-decode";
 import { API_BASE_URL } from "../../config/api";
+import { useAppContext } from "../../context/AppContext.jsx";
+import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
+
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
 const Register = () => {
+  const { isDark, toggleTheme } = useAppContext();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -117,9 +121,8 @@ const Register = () => {
         console.error("Error en registro:", data.message);
         throw new Error(data.message || "Error al registrar");
       }
-      
-      navigate("/login");
 
+      navigate("/login");
     } catch (err) {
       errorToast(err.message);
     }
@@ -131,7 +134,30 @@ const Register = () => {
 
   return (
     <div className="flex h-screen w-screen">
-      <div className="hidden md:block w-1/2">
+      <div className="hidden md:block w-3/4">
+        <li>
+          <button
+            onClick={toggleTheme}
+            aria-label="Cambiar tema"
+            className={`absolute bottom-12 left-12 flex items-center w-14 h-7 rounded-full transition-colors duration-500 cursor-pointer
+                              ${isDark ? "bg-gray-300" : "bg-gray-700"}`}
+          >
+            <span
+              className={`absolute flex items-center justify-center w-6 h-6 rounded-full shadow-md transform transition-transform duration-500
+                                ${
+                                  isDark
+                                    ? "translate-x-7 bg-gray-700"
+                                    : "translate-x-1 bg-gray-300"
+                                }`}
+            >
+              {isDark ? (
+                <MdOutlineLightMode className="text-yellow-400 text-[16px]" />
+              ) : (
+                <MdOutlineDarkMode className="text-gray-800 text-[16px]" />
+              )}
+            </span>
+          </button>
+        </li>
         <video
           autoPlay
           loop
@@ -143,11 +169,19 @@ const Register = () => {
         </video>
       </div>
 
-      <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
-        <form onSubmit={handleSubmit} className="w-full max-w-md text-white">
-          <h2 className="text-xl font-semibold mb-4">
-            ¡Crea una cuenta en un minuto!
-          </h2>
+      <div
+        className={`w-full md:w-1/2 ${
+          isDark ? "bg-[#1c1c1c]" : "bg-[#f5f3f0]"
+        }  flex items-center justify-center`}
+      >
+        {" "}
+        <form
+          onSubmit={handleSubmit}
+          className={`w-full max-w-md ${
+            isDark ? "text-[#f5f3f0]" : "text-[#1c1c1c]"
+          }`}
+        >
+          <h2 className="text-xl font-light mb-4">Registrate en un minuto!</h2>
 
           <input
             type="text"
@@ -211,7 +245,13 @@ const Register = () => {
             <Button1 type="submit">Registrarse</Button1>
           </div>
 
-          <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
+          <div
+            className={` ${
+              isDark
+                ? "text-[#f5f3f0] border-gray-700"
+                : "border-gray-400 text-[#1c1c1c]"
+            } text-start pt-3 border-t  mt-6`}
+          >
             <p className="text-xs font-light mb-3">¿Ya tienes una cuenta?</p>
             <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
           </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import Button from "../styles/Button";
 import RedButton from "../styles/RedButton";
@@ -57,7 +57,7 @@ const ConfirmModal = ({
           <AiOutlineClose size={20} />
         </button>
 
-        <h3 className={`text-lg font-semibold mb-6 text-center ${titleColor}`}>
+        <h3 className={`text-xl font-light mb-6 text-center ${titleColor}`}>
           {title}
         </h3>
         <p className={`text-sm mb-8 text-center ${messageColor}`}>{message}</p>

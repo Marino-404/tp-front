@@ -7,18 +7,22 @@ import Button from "../styles/Button";
 import { jwtDecode } from "jwt-decode";
 import { AuthenticationContext } from "../services/auth.context";
 import { API_BASE_URL } from "../../config/api";
+import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
+import { useAppContext } from "../../context/AppContext.jsx";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
 const Login = ({ setIsLogged }) => {
+  const { isDark, toggleTheme } = useAppContext();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: false, password: false });
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const {handleUserLogin} = useContext(AuthenticationContext);
+  const { handleUserLogin } = useContext(AuthenticationContext);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -71,7 +75,6 @@ const Login = ({ setIsLogged }) => {
       if (userRole === "2") navigate("/superadmin");
       else if (userRole === "1") navigate("/admin");
       else navigate("/user");
-
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
       errorToast("Error al conectar con el servidor.");
@@ -84,7 +87,30 @@ const Login = ({ setIsLogged }) => {
 
   return (
     <div className="flex h-screen w-screen">
-      <div className="hidden md:block w-1/2">
+      <div className="hidden md:block w-3/4">
+        <li>
+          <button
+            onClick={toggleTheme}
+            aria-label="Cambiar tema"
+            className={`absolute bottom-12 left-12 flex items-center w-14 h-7 rounded-full transition-colors duration-500 cursor-pointer
+                        ${isDark ? "bg-gray-300" : "bg-gray-700"}`}
+          >
+            <span
+              className={`absolute flex items-center justify-center w-6 h-6 rounded-full shadow-md transform transition-transform duration-500
+                          ${
+                            isDark
+                              ? "translate-x-7 bg-gray-700"
+                              : "translate-x-1 bg-gray-300"
+                          }`}
+            >
+              {isDark ? (
+                <MdOutlineLightMode className="text-yellow-400 text-[16px]" />
+              ) : (
+                <MdOutlineDarkMode className="text-gray-800 text-[16px]" />
+              )}
+            </span>
+          </button>
+        </li>
         <video
           autoPlay
           loop
@@ -96,15 +122,29 @@ const Login = ({ setIsLogged }) => {
         </video>
       </div>
 
-      <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
+      <div
+        className={`w-full md:w-1/2 ${
+          isDark ? "bg-[#1c1c1c]" : "bg-[#f5f3f0]"
+        }  flex items-center justify-center`}
+      >
         <div className="w-full h-auto flex flex-col max-w-md">
-          <h1 className="text-white text-md font-bold text-start">
-            <p className="mb-2"> Bienvenidos a</p>
+          <h1
+            className={`text-md font-bold text-start ${
+              isDark ? "text-[#f5f3f0]" : "text-[#1c1c1c]"
+            }`}
+          >
+            <p className="mb-2 font-light"> Bienvenidos a</p>
             <span className="text-5xl flex flex-row mb-4">
               <p className="bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
                 Football
               </p>
-              <p className="font-normal text-white">Finder</p>
+              <p
+                className={`font-normal ${
+                  isDark ? "text-[#f5f3f0]" : "text-[#1c1c1c]"
+                }`}
+              >
+                Finder
+              </p>
             </span>
           </h1>
 
@@ -135,7 +175,13 @@ const Login = ({ setIsLogged }) => {
               <Button1 type="submit">Iniciar Sesión</Button1>
             </div>
           </form>
-          <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
+          <div
+            className={` ${
+              isDark
+                ? "text-[#f5f3f0] border-gray-700"
+                : "border-gray-400 text-[#1c1c1c]"
+            } text-start pt-3 border-t  mt-6`}
+          >
             <p className="text-xs font-light mb-3">
               ¿Aún no tienes una cuenta?
             </p>
