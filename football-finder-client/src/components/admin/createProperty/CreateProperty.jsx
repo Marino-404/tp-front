@@ -1,21 +1,19 @@
-
 import React, { useContext, useState, useRef } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
 import { useNavigate } from "react-router-dom";
 import RedButton from "../../styles/RedButton.jsx";
-import FieldListForm from './FieldListForm.jsx';
+import FieldListForm from "./FieldListForm.jsx";
 import SchedulesListForm from "./SchedulesListForm.jsx";
 import { validarDireccion, validateString } from "../../auth/auth.services.js";
 
-import {API_BASE_URL} from '../../../config/api.js';
+import { API_BASE_URL } from "../../../config/api.js";
 
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import Button from "../../styles/Button.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 
-
-function CreateProperty({setHasProperty}) { 
+function CreateProperty({ setHasProperty }) {
   const navigate = useNavigate();
 
   const { token } = useContext(AuthenticationContext);
@@ -59,17 +57,17 @@ function CreateProperty({setHasProperty}) {
       return;
     }
     const newproperty = {
-      Name: name,
-      Address: adress,
-      Zone: zone,
-      Schedule: schedules,
-      FieldsType: fieldsType,
-    }
+      name,
+      address: adress,
+      zone,
+      fieldsType: fieldsType.map((f) => Number(f)),
+      schedules: schedules.map((s) => Number(s)),
+    };
 
     fetch(`${API_BASE_URL}/properties`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(newproperty),
@@ -78,8 +76,8 @@ function CreateProperty({setHasProperty}) {
         if (!res.ok) {
           if (res.status === 400) {
             return res.json().then((data) => {
-            throw new Error(data.message);
-          });
+              throw new Error(data.message);
+            });
           }
           throw new Error();
         }
@@ -95,8 +93,9 @@ function CreateProperty({setHasProperty}) {
         errorToast(error.message || "Error al crear la propiedad");
         if (error.message === "Nombre de la propiedad ya tomado") {
           nameRef.current.focus();
-        }})
-  }
+        }
+      });
+  };
   const onAddPosition = (newSch) => {
     if (newSch && !schedules.includes(newSch)) {
       setSchedules([...schedules, newSch]);
@@ -167,7 +166,6 @@ function CreateProperty({setHasProperty}) {
       </div>
     </div>
   );
-
 }
 
-export default CreateProperty
+export default CreateProperty;

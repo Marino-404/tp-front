@@ -1,14 +1,13 @@
 import { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { inputStyle, TittleCard } from "../../../styles/Cards.jsx";
-import { ContainerStyle } from "../../../styles/Container.jsx";
+
 import { isInAWeek } from "../../../utils/validations.js";
 import { errorToast, successToast } from "../../../toast/NotificationToast.jsx";
 import { useAppContext } from "../../../../context/AppContext.jsx";
 
 import Button from "../../../styles/Button.jsx";
 import { AuthenticationContext } from "../../../services/auth.context.jsx";
-import { RxCross1, RxVercelLogo } from "react-icons/rx";
+import { RxCross1 } from "react-icons/rx";
 import useConfirmModal from "../../../../hooks/useConfirmModal";
 import { API_BASE_URL } from "../../../../config/api.js";
 
@@ -25,7 +24,7 @@ function PropertySchedules() {
   const [missingPlayers, setMissingPlayers] = useState(5);
 
   const getFieldsSchedules = (actualDate) => {
-    console.log(actualDate)
+    console.log(actualDate);
     fetch(
       `${API_BASE_URL}/properties/property-schedules?propertyId=${pid}&date=${actualDate}`,
       {
@@ -41,8 +40,8 @@ function PropertySchedules() {
         return res.json();
       })
       .then((data) => {
-        setFieldSchedules(data)
-        console.log(data)
+        setFieldSchedules(data);
+        console.log(data);
       })
       .catch((err) =>
         errorToast(err.message || "Error al obtener los horarios")
