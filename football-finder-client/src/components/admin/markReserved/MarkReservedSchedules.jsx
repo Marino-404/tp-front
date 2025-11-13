@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
 import { useAppContext } from "../../../context/AppContext.jsx";
 import { isInAWeek } from "../../utils/validations.js";
@@ -14,13 +14,14 @@ function MarkReservedSchedules() {
   const navigate = useNavigate();
   const { token } = useContext(AuthenticationContext);
   const { show, Modal } = useConfirmModal();
+  const {pid} = useParams();
 
   const [fieldSchedules, setFieldSchedules] = useState([]);
   const [selected, setSelected] = useState([]);
   const [date, setDate] = useState("");
 
   const getFieldsSchedules = (actualDate) => {
-    fetch(`${API_BASE_URL}/properties/property-schedules?date=${actualDate}`, {
+    fetch(`${API_BASE_URL}/properties/property-schedules?date=${actualDate}&propertyId=${pid}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -35,6 +36,7 @@ function MarkReservedSchedules() {
       .catch((err) => errorToast(err.message));
   };
 
+
   const handleChangeDate = (e) => {
     const newDate = e.target.value;
     if (!isInAWeek(newDate)) {
@@ -46,18 +48,20 @@ function MarkReservedSchedules() {
     }
   };
 
-  const toggleSelect = (fieldId, scheduleId) => {
+  const toggleSelect = (field_Id, schedule_Id) => {
+    console.log(field_Id, schedule_Id)
     const exists = selected.some(
-      (s) => s.fieldId === fieldId && s.scheduleId === scheduleId
+      (s) => s.field_Id === field_Id && s.schedule_Id === schedule_Id
     );
     if (exists) {
       setSelected(
         selected.filter(
-          (s) => !(s.fieldId === fieldId && s.scheduleId === scheduleId)
+          (s) => !(s.field_Id === field_Id && s.schedule_Id === schedule_Id)
         )
       );
     } else {
-      setSelected([...selected, { fieldId, scheduleId }]);
+      console.log("first")
+      setSelected([...selected, { field_Id:field_Id, schedule_Id: schedule_Id }]);
     }
   };
 
@@ -76,8 +80,9 @@ function MarkReservedSchedules() {
   };
 
   const saveReservations = () => {
-    fetch(`${API_BASE_URL}/properties/crossout`, {
-      method: "POST",
+    console.log({date, scheduleFields: selected})
+    fetch(`${API_BASE_URL}/properties/crossout-schedule/${pid}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -89,6 +94,7 @@ function MarkReservedSchedules() {
     })
       .then((res) => {
         if (!res.ok) {
+          console.log(res)
           return res.json().then((data) => {
             throw new Error(data.message || "Error al marcar horarios");
           });
@@ -150,8 +156,8 @@ function MarkReservedSchedules() {
                   {field.schedules.map((sch) => {
                     const isSelected = selected.some(
                       (s) =>
-                        s.scheduleId === sch.scheduleId &&
-                        s.fieldId === field.fieldId
+                        s.schedule_Id === sch.scheduleId &&
+                        s.field_Id === field.fieldId
                     );
 
                     const baseClasses =
@@ -161,10 +167,13 @@ function MarkReservedSchedules() {
                       ? "border-red-500 bg-red-500/40"
                       : "border-gray-300 hover:border-red-400";
 
+                    const availableClasses = sch.available
+                    ? ""
+                    : "opacity-50 cursor-not-allowed pointer-events-none";
                     return (
                       <li
                         key={sch.scheduleId}
-                        className={`${baseClasses} ${selectedClasses}`}
+                        className={`${baseClasses} ${selectedClasses} ${availableClasses}`}
                         onClick={() =>
                           toggleSelect(field.fieldId, sch.scheduleId)
                         }
