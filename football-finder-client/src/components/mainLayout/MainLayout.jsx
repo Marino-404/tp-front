@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer";
+import Footer from "./footer";
 
 const MainLayout = () => {
   return (
