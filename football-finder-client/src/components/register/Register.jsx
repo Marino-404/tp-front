@@ -158,15 +158,11 @@ const Register = () => {
             </span>
           </button>
         </li>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-[-1]  grayscale brightness-[0.3]"
-        >
-          <source src="/video1.mp4" type="video/mp4" />
-        </video>
+        <img
+          src="/loginyregister.jpg"
+          alt="background"
+          className="absolute top-0 left-0 w-full h-full object-cover z-[-1] grayscale brightness-[0.3]"
+        />
       </div>
 
       <div
