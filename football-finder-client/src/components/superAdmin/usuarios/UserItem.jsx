@@ -58,7 +58,7 @@ const UserItem = ({ user, onUserDelete }) => {
   };
 
   const deleteUser = () => {
-    fetch(`${API_BASE_URL}/users/delete/${user.id}`, {
+    fetch(`${API_BASE_URL}/users/${user.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
